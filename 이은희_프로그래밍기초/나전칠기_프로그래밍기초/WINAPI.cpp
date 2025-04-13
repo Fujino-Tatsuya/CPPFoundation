@@ -1,6 +1,6 @@
 #include <Windows.h>
 #include <iostream>
-#include "GeoShapeManager.h";
+#include "GeoShapeManager.h"
 
 namespace
 {
@@ -95,9 +95,10 @@ namespace
 			int y = HIWORD(lparam);
 			int shape = Shape_CIRCLE;
 
-			if (!simplegeo::g_GeoShapeManager.DetectGeo(x, y, shape)); //true Áö¿ò, flase °Å¸® ³» ¾øÀ½ Not ¿¬»êÀ¸·Î ¹İÀü
+			simplegeo::g_GeoShapeManager.FindEmpty();
+			if (!simplegeo::g_GeoShapeManager.DetectGeo(x, y, shape)) //true Áö¿ò, flase °Å¸® ³» ¾øÀ½, Not ¿¬»êÀ¸·Î ¹İÀü
 			{
-				simplegeo::g_GeoShapeManager.AddCircle(x, y, 10,Shape_CIRCLE, RGB(255, 0, 0));
+				simplegeo::g_GeoShapeManager.AddCircle(x, y, 10, Shape_CIRCLE, RGB(255, 0, 0));
 			}
 			::InvalidateRect(hwnd, NULL, TRUE); //InvalidateRect È£­½Ã WM_PAINT ¸Ş¼¼Áö Àü´Ş
 		}break;
@@ -106,9 +107,13 @@ namespace
 			std::cout << "WM_RBUTTONDBLCLK" << std::endl;
 			int x = LOWORD(lparam);
 			int y = HIWORD(lparam);
+			int shape = Shape_RECTAGLE;
 
-			simplegeo::g_GeoShapeManager.AddRectangle(x, y, 10, Shape_RECTAGLE,RGB(0, 0, 255));
-
+			simplegeo::g_GeoShapeManager.FindEmpty();
+			if (!simplegeo::g_GeoShapeManager.DetectGeo(x, y, shape))
+			{
+				simplegeo::g_GeoShapeManager.AddRectangle(x, y, 10, Shape_RECTAGLE, RGB(0, 0, 255));
+			}
 			::InvalidateRect(hwnd, NULL, TRUE);
 
 		}break;
@@ -122,8 +127,8 @@ namespace
 			std::cout << "WM_CLOSE" << std::endl;
 			// À©µµ¿ì¸¦ Á¾·áÇÏ±â À§ÇÑ ¸Ş½ÃÁö
 			PostQuitMessage(0); // WM_QUIT
-		}break; 
-		
+		}break;
+
 		case WM_KEYDOWN:
 		{
 			if (wparam == 'C' || wparam == 'c')

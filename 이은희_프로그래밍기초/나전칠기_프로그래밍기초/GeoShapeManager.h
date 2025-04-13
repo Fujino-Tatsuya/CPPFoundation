@@ -1,5 +1,6 @@
 #include "INC_Windows.h"
 #include <cmath>
+#include <iostream>
 
 enum Shape
 {
@@ -64,7 +65,7 @@ namespace simplegeo
 			pos.x = m_centerX;
 			pos.y = m_centerY;
 			pos.size = m_radius;
-
+			pos.shape = m_shape;
 			return pos;
 		}
 	private:
@@ -100,6 +101,7 @@ namespace simplegeo
 			pos.x = m_centerX;
 			pos.y = m_centerY;
 			pos.size = m_size;
+			pos.shape = m_shape;
 			return pos;
 		}
 	private:
@@ -149,6 +151,19 @@ namespace simplegeo
 			}
 		}
 
+		void FindEmpty()
+		{
+			for (int i = 0; i < MAX_SHAPES; ++i)
+			{
+				if (m_shapes[i] == nullptr)
+				{
+					m_shapeCount = i;
+					std::cout << m_shapeCount << std::endl;
+					break;
+				}
+			}
+		}
+
 		bool DetectGeo(int mouseX, int mouseY, int shape) //true 면 지우고 // false면 그리기
 		{
 			for (int i = 0; i < MAX_SHAPES; i++)
@@ -161,9 +176,8 @@ namespace simplegeo
 					if (shape == geoInfo.shape && geoInfo.size > sqrt(pow(geoInfo.x - mouseX, 2) + pow(geoInfo.y - mouseY, 2)))
 					{
 						m_shapes[i] = nullptr;
-						--m_shapeCount;
+						//--m_shapeCount;
 						return true;
-						break;
 					}
 				}
 			}
@@ -175,7 +189,7 @@ namespace simplegeo
 			if (m_shapeCount >= MAX_SHAPES) return;
 
 			m_shapes[m_shapeCount] = new Circle(centerX, centerY, radius, shape, color);
-			++m_shapeCount;
+			//++m_shapeCount;
 		}
 
 		void AddRectangle(int x, int y, int size, int shape, COLORREF color)
@@ -183,7 +197,7 @@ namespace simplegeo
 			if (m_shapeCount >= MAX_SHAPES) return;
 
 			m_shapes[m_shapeCount] = new RectangleShape(x, y, size, shape, color);
-			++m_shapeCount;
+			//++m_shapeCount;
 		}
 
 		void AddLine(int startX, int startY, int endX, int endY, COLORREF color)
@@ -191,16 +205,21 @@ namespace simplegeo
 			if (m_shapeCount >= MAX_SHAPES) return;
 
 			m_shapes[m_shapeCount] = new Line(startX, startY, endX, endY, color);
-			++m_shapeCount;
+			//++m_shapeCount;
 		}
 
-		void Draw(HDC hdc) //
+		void Draw(HDC hdc)
 		{
 			for (int i = 0; i < MAX_SHAPES; ++i)
 			{
-				if (m_shapes[i] == nullptr) break;
-
-				m_shapes[i]->Draw(hdc);
+				if (m_shapes[i] == nullptr)
+				{
+					continue;
+				}
+				else
+				{
+					m_shapes[i]->Draw(hdc);
+				}
 			}
 		}
 
