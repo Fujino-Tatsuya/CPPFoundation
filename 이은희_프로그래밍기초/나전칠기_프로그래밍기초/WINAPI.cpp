@@ -93,14 +93,11 @@ namespace
 			// ÁÂÇ¥¸¦ °¡Á®¿Â´Ù.
 			int x = LOWORD(lparam);
 			int y = HIWORD(lparam);
+			int shape = Shape_CIRCLE;
 
-			if (true)
+			if (!simplegeo::g_GeoShapeManager.DetectGeo(x, y, shape)); //true Áö¿ò, flase °Å¸® ³» ¾øÀ½ Not ¿¬»êÀ¸·Î ¹İÀü
 			{
-				simplegeo::g_GeoShapeManager.AddCircle(x, y, 10, RGB(255, 0, 0));
-			}
-			else
-			{
-				simplegeo::g_GeoShapeManager.RemoveGeo(x, y);
+				simplegeo::g_GeoShapeManager.AddCircle(x, y, 10,Shape_CIRCLE, RGB(255, 0, 0));
 			}
 			::InvalidateRect(hwnd, NULL, TRUE); //InvalidateRect È£­½Ã WM_PAINT ¸Ş¼¼Áö Àü´Ş
 		}break;
@@ -110,7 +107,7 @@ namespace
 			int x = LOWORD(lparam);
 			int y = HIWORD(lparam);
 
-			simplegeo::g_GeoShapeManager.AddRectangle(x, y, 10,RGB(0, 0, 255));
+			simplegeo::g_GeoShapeManager.AddRectangle(x, y, 10, Shape_RECTAGLE,RGB(0, 0, 255));
 
 			::InvalidateRect(hwnd, NULL, TRUE);
 

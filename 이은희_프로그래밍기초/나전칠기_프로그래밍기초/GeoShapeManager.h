@@ -1,22 +1,42 @@
 #include "INC_Windows.h"
+#include <cmath>
+
+enum Shape
+{
+	Shape_CIRCLE,
+	Shape_RECTAGLE,
+	Shape_LINE,
+};
 
 namespace simplegeo
 {
+	struct GeoInfo
+	{
+	public:
+		int x;
+		int y;
+		int size;
+		int shape;
+	};
+
 	class ShapeBase
 	{
 	public:
 		virtual void Draw(HDC hdc) = 0;
 		virtual ~ShapeBase() {}
 
-		virtual int GetX() {};
-		virtual int GetY() {};
+		virtual GeoInfo GetInfo()
+		{
+			GeoInfo info = { 0, };
+			return info;
+		};
 	};
 
 	class Circle : public ShapeBase
 	{
 	public:
-		Circle(int centerX, int centerY, int radius, COLORREF color)
-			: m_centerX(centerX), m_centerY(centerY), m_radius(radius), m_color(color) {
+		Circle(int centerX, int centerY, int radius, int shape, COLORREF color)
+			: m_centerX(centerX), m_centerY(centerY), m_radius(radius), m_shape(shape), m_color(color) {
 		}
 
 		void Draw(HDC hdc) override
@@ -37,17 +57,18 @@ namespace simplegeo
 			DeleteObject(hPen);
 		}
 
-		int GetX() override
+		GeoInfo GetInfo() override
 		{
-			return m_centerX;
-		}
+			GeoInfo pos = { 0, };
 
-		int GetY() override
-		{
-			return m_centerY;
+			pos.x = m_centerX;
+			pos.y = m_centerY;
+			pos.size = m_radius;
+
+			return pos;
 		}
 	private:
-		int m_centerX, m_centerY, m_radius;
+		int m_centerX, m_centerY, m_radius, m_shape;
 		COLORREF m_color;
 	};
 
@@ -55,8 +76,8 @@ namespace simplegeo
 	class RectangleShape : public ShapeBase
 	{
 	public:
-		RectangleShape(int left, int bottom, int size, COLORREF color)
-			: m_left(left), m_bottom(bottom), m_size(size), m_color(color) {
+		RectangleShape(int x, int y, int size, int shape, COLORREF color)
+			: m_centerX(x), m_centerY(y), m_size(size), m_shape(shape), m_color(color) {
 		}
 
 		void Draw(HDC hdc) override
@@ -65,24 +86,24 @@ namespace simplegeo
 			HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
 			HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
 
-			Rectangle(hdc, m_left, (m_bottom + m_size), (m_left + m_size), m_bottom);
+			Rectangle(hdc, (m_centerX - m_size), (m_centerY + m_size), (m_centerX + m_size), (m_centerY - m_size));
 
 			SelectObject(hdc, hOldPen);
 			SelectObject(hdc, hOldBrush);
 			DeleteObject(hPen);
 		}
 
-		int GetX() override
+		GeoInfo GetInfo() override
 		{
-			return m_bottom;
-		}
+			GeoInfo pos = { 0, };
 
-		int GetY() override
-		{
-			return m_left;
+			pos.x = m_centerX;
+			pos.y = m_centerY;
+			pos.size = m_size;
+			return pos;
 		}
 	private:
-		int m_left, m_bottom, m_size;
+		int m_centerX, m_centerY, m_size, m_shape;
 		COLORREF m_color;
 	};
 
@@ -106,15 +127,6 @@ namespace simplegeo
 			DeleteObject(hPen);
 		}
 
-		int GetX() override
-		{
-			return;
-		}
-
-		int GetY() override
-		{
-			return;
-		}
 	private:
 		int m_startX, m_startY, m_endX, m_endY;
 		COLORREF m_color;
@@ -137,24 +149,40 @@ namespace simplegeo
 			}
 		}
 
-		void RemoveGeo(int mouseX, int mouseY)
+		bool DetectGeo(int mouseX, int mouseY, int shape) //true 면 지우고 // false면 그리기
 		{
+			for (int i = 0; i < MAX_SHAPES; i++)
+			{
+				if (m_shapes[i] != nullptr)
+				{
+					GeoInfo geoInfo = { 0, };
+					geoInfo = m_shapes[i]->GetInfo();
 
+					if (shape == geoInfo.shape && geoInfo.size > sqrt(pow(geoInfo.x - mouseX, 2) + pow(geoInfo.y - mouseY, 2)))
+					{
+						m_shapes[i] = nullptr;
+						--m_shapeCount;
+						return true;
+						break;
+					}
+				}
+			}
+			return false;
 		}
 
-		void AddCircle(int centerX, int centerY, int radius, COLORREF color)
+		void AddCircle(int centerX, int centerY, int radius, int shape, COLORREF color)
 		{
 			if (m_shapeCount >= MAX_SHAPES) return;
 
-			m_shapes[m_shapeCount] = new Circle(centerX, centerY, radius, color);
+			m_shapes[m_shapeCount] = new Circle(centerX, centerY, radius, shape, color);
 			++m_shapeCount;
 		}
 
-		void AddRectangle(int left, int bottom, int size, COLORREF color)
+		void AddRectangle(int x, int y, int size, int shape, COLORREF color)
 		{
 			if (m_shapeCount >= MAX_SHAPES) return;
 
-			m_shapes[m_shapeCount] = new RectangleShape(left, bottom, size, color);
+			m_shapes[m_shapeCount] = new RectangleShape(x, y, size, shape, color);
 			++m_shapeCount;
 		}
 
