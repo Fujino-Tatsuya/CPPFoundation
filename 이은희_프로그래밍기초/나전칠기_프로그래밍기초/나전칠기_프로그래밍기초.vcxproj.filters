@@ -5,11 +5,15 @@
     <ClCompile Include="WINAPI.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="gameLoopwithGUI.cpp" />
+    <ClCompile Include="TimeSystem.cpp" />
+    <ClCompile Include="RandomGen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="INC_Windows.h" />
     <ClInclude Include="GeoShapeManager.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="TimeSystem.h" />
+    <ClInclude Include="RandomGen.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="MyMemo.txt" />

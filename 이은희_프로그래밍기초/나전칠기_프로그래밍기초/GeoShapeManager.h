@@ -1,6 +1,7 @@
 #include "INC_Windows.h"
 #include <cmath>
 #include <iostream>
+#include "RandomGen.h"
 
 enum Shape
 {
@@ -183,6 +184,20 @@ namespace simplegeo
 			}
 			return false;
 		}
+
+		void RandomDraw(int randomNum)
+		{
+			switch(randomNum)
+			{
+			case Shape_CIRCLE:
+				m_shapes[m_shapeCount] = new Circle(RandomGen::GetRandom(0,1280), RandomGen::GetRandom(0,720), RandomGen::GetRandom(1,50), Shape_CIRCLE, RGB(255, 0, 0));
+				break;
+			case Shape_RECTAGLE:
+				m_shapes[m_shapeCount] = new RectangleShape(RandomGen::GetRandom(0, 1280), RandomGen::GetRandom(0, 720), RandomGen::GetRandom(1, 50), Shape_RECTAGLE, RGB(0, 0, 255));
+				break;
+			}
+		}
+
 
 		void AddCircle(int centerX, int centerY, int radius, int shape, COLORREF color)
 		{

@@ -1,6 +1,9 @@
 #include <Windows.h>
 #include <iostream>
 #include "GeoShapeManager.h"
+#include "TimeSystem.h"
+#include "RandomGen.h"
+
 
 namespace
 {
@@ -179,11 +182,25 @@ namespace
 		return hWnd;
 	}
 
-	void GameLoop()
+	void GameLoop(HWND hWnd)
 	{
 		MSG msg = {};
+		QPC qpc;
+		RandomGen radom;
+		int current = 0;
+
 		while (WM_QUIT != msg.message)
 		{
+			qpc.GetHighresolutiontime();
+			if (current != (int)qpc.a.QuadPart)
+			{
+				simplegeo::g_GeoShapeManager.FindEmpty();
+				simplegeo::g_GeoShapeManager.RandomDraw(RandomGen::GetRandom(0, 1));
+				::InvalidateRect(hWnd, NULL, TRUE);
+				current = (int)qpc.a.QuadPart;
+			}
+
+
 			if (PeekMessage(&msg, HWND(), 0, 0, PM_REMOVE))
 			{
 				TranslateMessage(&msg); //키 입력을 char로 변환한대 그렇대
@@ -212,7 +229,7 @@ int main()
 	std::cout << "hWnd: " << hWnd << std::endl;
 	//std::cout << (*hWnd).unused << std::endl; 런타임 에러!
 
-	GameLoop();
+	GameLoop(hWnd);
 
 	DestroyWindow(hWnd);
 
