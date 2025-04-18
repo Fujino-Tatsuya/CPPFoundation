@@ -178,7 +178,17 @@ void GameObject::Move(float deltaTime)
 
 void GameObject::UpdateFrame(float deltaTime)
 {
-    // 구현해 보기
+    int currentFrame = 0;
+    m_frameTime += deltaTime;
+    if (m_frameTime >= 1.f)
+    {
+        m_frameIndex++;
+        m_frameTime -= m_frameDuration;
+        if (m_frameIndex >= 14)
+        {
+            m_frameIndex = 0;
+        }
+    }
 }
 
 void GameObjectBase::SetName(const char* name)

@@ -42,5 +42,5 @@ protected:
     NzWndBase& operator=(NzWndBase&&) = delete;
 
 private:
-    int mmm;
+    int mmm = 0;
 };
