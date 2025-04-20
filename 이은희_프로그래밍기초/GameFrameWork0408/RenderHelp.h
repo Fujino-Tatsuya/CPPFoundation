@@ -4,6 +4,7 @@
 namespace renderHelp
 {
     struct WICInitializer;
+
     class BitmapInfo
     {
     public:

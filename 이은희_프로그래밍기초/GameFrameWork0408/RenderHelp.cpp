@@ -146,7 +146,6 @@ namespace renderHelp
         {
             BitmapInfo* pNewBitmap = new BitmapInfo(hBitmap);
       
-
             return pNewBitmap;
         }
 

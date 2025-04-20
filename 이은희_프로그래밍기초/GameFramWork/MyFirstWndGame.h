@@ -39,6 +39,7 @@ private:
     void CreateEnemy();
 
     void UpdatePlayerInfo();
+    void UpdateEnemyInfo();
 
     GameObject* GetPlayer() const { return (GameObject*)m_GameObjectPtrTable[0]; }
 

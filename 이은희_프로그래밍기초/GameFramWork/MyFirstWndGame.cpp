@@ -118,38 +118,6 @@ void MyFirstWndGame::FixedUpdate()
 {
 	if (m_EnemySpawnPos.x != 0 && m_EnemySpawnPos.y != 0) //적 스폰 위치가 변경되었을 때 (오른쪽 클릭시) 적 생성.
 	{
-		for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
-		{
-			if (m_GameObjectPtrTable[i] == nullptr) break;
-
-			ColliderCircle lhs = static_cast<GameObject*>(m_GameObjectPtrTable[i])->GetColliderCircle();
-			ColliderCircle rhs = { {(float)m_EnemySpawnPos.x,(float)m_EnemySpawnPos.y}, 50.0f };
-			if (learning::Intersect(lhs, rhs))
-			{
-				m_EnemySpawnPos = { 0, 0 };
-				return;
-			}
-			//다운캐스팅 + collider learning::intersect(col, col); return;
-		}
-
-		for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
-		{
-			if (m_GameObjectPtrTable[i] == nullptr) break;
-
-			ColliderCircle playerCollider = static_cast<GameObject*>(m_GameObjectPtrTable[0])->GetColliderCircle();
-			ColliderCircle enemyCollider = static_cast<GameObject*>(m_GameObjectPtrTable[i])->GetColliderCircle();
-
-			/*if (learning::Intersect(playerCollider, enemyCollider))
-			{
-				m_GameObjectPtrTable[i]
-			}
-			else
-			{
-
-			}*/
-		}
-
-
 		CreateEnemy();
 	}
 }
@@ -158,6 +126,7 @@ void MyFirstWndGame::LogicUpdate()
 {
 
 	UpdatePlayerInfo();
+	UpdateEnemyInfo();
 
 	for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
 	{
@@ -199,10 +168,20 @@ void MyFirstWndGame::CreateEnemy()
 
 	pNewObject->SetColliderCircle(50.0f); // 일단, 임의로 설정. 오브젝트 설정할 거 다 하고 나서 하자.
 
+	for (int i = 1; i < MAX_GAME_OBJECT_COUNT; ++i)
+	{
+		if (m_GameObjectPtrTable[i] == nullptr) break;
+
+		if (learning::Intersect(static_cast<GameObject*>(m_GameObjectPtrTable[i])->GetColliderCircle(), pNewObject->GetColliderCircle()))
+		{
+			return;
+		}
+	}
+
 	int i = 0;
 	while (++i < MAX_GAME_OBJECT_COUNT) //0번째는 언제나 플레이어!
 	{
-		if (nullptr == m_GameObjectPtrTable[i])
+		if (nullptr == m_GameObjectPtrTable[i]) //i가 null이면 생성하고 break;
 		{
 			m_GameObjectPtrTable[i] = pNewObject;
 			break;
@@ -215,6 +194,26 @@ void MyFirstWndGame::CreateEnemy()
 		delete pNewObject;
 		pNewObject = nullptr;
 	}
+}
+
+void MyFirstWndGame::UpdateEnemyInfo()
+{
+	static GameObject* pPlayer = GetPlayer();
+
+	for (int i = 1; i < MAX_GAME_OBJECT_COUNT; ++i)
+	{
+		if (m_GameObjectPtrTable[i] == nullptr) break;
+
+		if (learning::Intersect(static_cast<GameObject*>(m_GameObjectPtrTable[i])->GetColliderCircle(), pPlayer->GetColliderCircle())) //플레이어랑 충돌중이면 BLUE
+		{
+			static_cast<GameObject*>(m_GameObjectPtrTable[i])->SetColor(BLUE);
+		}
+		else
+		{
+			static_cast<GameObject*>(m_GameObjectPtrTable[i])->SetColor(RED);
+		}
+	}
+	
 }
 
 void MyFirstWndGame::UpdatePlayerInfo()
@@ -237,6 +236,21 @@ void MyFirstWndGame::UpdatePlayerInfo()
 	else
 	{
 		pPlayer->SetDirection(Vector2f(0, 0)); // 플레이어 정지
+	}
+
+	for (int i = 1; i < MAX_GAME_OBJECT_COUNT; ++i)
+	{
+		if (m_GameObjectPtrTable[i] == nullptr) break;
+
+		if (learning::Intersect(static_cast<GameObject*>(m_GameObjectPtrTable[i])->GetColliderCircle(), pPlayer->GetColliderCircle())) //전부 순회하며 하나라도 충돌중이라면 BLUE
+		{
+			pPlayer->SetColor(BLUE);
+			break;
+		}
+		else
+		{
+			pPlayer->SetColor(RED);
+		}
 	}
 }
 

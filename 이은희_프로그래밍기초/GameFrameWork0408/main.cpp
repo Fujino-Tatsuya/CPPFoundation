@@ -9,7 +9,7 @@ int main()
 	// 첫 줄은 꼭 이 함수를 호출하고 시작 합니다.
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	_CrtSetBreakAlloc(165);
+	_CrtSetBreakAlloc(160);
 
 	MyFirstWndGame game;
 	if (false == game.Initialize())

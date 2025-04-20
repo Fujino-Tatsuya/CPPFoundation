@@ -23,6 +23,13 @@ enum class ObjectType
     BACKGROUND,
 };
 
+enum Color
+{
+    RED,
+    GREEN,
+    BLUE
+};
+
 constexpr int OBJECT_NAME_LEN_MAX = 15;
 
 class GameObjectBase
@@ -33,7 +40,7 @@ public:
     GameObjectBase() = delete;
     GameObjectBase(const GameObjectBase&) = delete;
 
-    GameObjectBase(ObjectType type) : m_type(type) {}
+GameObjectBase(ObjectType type) : m_type(type) {}
 
     virtual ~GameObjectBase() = default;
 
@@ -93,48 +100,12 @@ public:
     void SetColliderBox(float halfWidth, float halfHeight);
 
     ColliderCircle GetColliderCircle();
+    void SetColor(int val);
+    int GetColor();
 
 protected:
-    // 과제: 해당 코드의 문제는 무엇일까요? 어떻게 개선하면 좋을까요?
-    // 개선 방향에 대해 서로 토론하고 비교해 보세요.
-    void DrawCollider(HDC hdc)
-    {
-        HPEN hPen = nullptr;
 
-        switch (index)
-        {
-        case RED: hPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
-            break;
-        case BLUE: hPen = CreatePen(PS_SOLID, 2, RGB(0, 0, 255));
-            break;
-        case GREEN: hPen = CreatePen(PS_SOLID, 2, RGB(0, 255, 0));
-            break;
-        }
-
-        HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
-        HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
-
-        if (m_pColliderCircle)
-        {
-            Ellipse(hdc, m_pColliderCircle->center.x - m_pColliderCircle->radius,
-                m_pColliderCircle->center.y - m_pColliderCircle->radius,
-                m_pColliderCircle->center.x + m_pColliderCircle->radius,
-                m_pColliderCircle->center.y + m_pColliderCircle->radius);
-        }
-
-        if (m_pColliderBox)
-        {
-            Rectangle(hdc, m_pColliderBox->center.x - m_pColliderBox->halfSize.x,
-                m_pColliderBox->center.y - m_pColliderBox->halfSize.y,
-                m_pColliderBox->center.x + m_pColliderBox->halfSize.x,
-                m_pColliderBox->center.y + m_pColliderBox->halfSize.y);
-        }
-
-        // 이전 객체 복원 및 펜 삭제
-        SelectObject(hdc, hOldPen);
-        SelectObject(hdc, hOldBrush);
-        DeleteObject(hPen);
-    }
+    void DrawCollider(HDC hdc);
 
     void Move(float deltaTime);
 

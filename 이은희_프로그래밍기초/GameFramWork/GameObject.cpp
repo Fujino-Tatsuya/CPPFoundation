@@ -80,26 +80,31 @@ learning::ColliderCircle GameObject::GetColliderCircle()
     return *this->m_pColliderCircle;
 }
 
-enum Color
+void GameObject::SetColor(int val)
 {
-    RED,
-    BLUE,
-    GREEN
-};
+    color = val;
+}
+
+int GameObject::GetColor()
+{
+    return color;
+}
 
 // 과제: 해당 코드의 문제는 무엇일까요? 어떻게 개선하면 좋을까요?
 // 개선 방향에 대해 서로 토론하고 비교해 보세요.
-void GameObject::DrawCollider(HDC hdc,Color index)
+void GameObject::DrawCollider(HDC hdc)
 {
     HPEN hPen = nullptr;
 
-    switch(index)
+    switch(color)
     {
     case RED: hPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
         break;
     case BLUE: hPen = CreatePen(PS_SOLID, 2, RGB(0, 0, 255));
         break;
     case GREEN: hPen = CreatePen(PS_SOLID, 2, RGB(0, 255, 0));
+        break;
+    default: hPen = CreatePen(PS_SOLID, 2, RGB(255,0, 0)); //RED
         break;
     }
     
