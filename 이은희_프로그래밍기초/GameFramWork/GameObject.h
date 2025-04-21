@@ -105,7 +105,44 @@ public:
 
 protected:
 
+<<<<<<< HEAD
     void DrawCollider(HDC hdc);
+=======
+        switch (color)
+        {
+        case RED: hPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
+            break;
+        case BLUE: hPen = CreatePen(PS_SOLID, 2, RGB(0, 0, 255));
+            break;
+        case GREEN: hPen = CreatePen(PS_SOLID, 2, RGB(0, 255, 0));
+            break;
+        }
+
+        HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
+        HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
+
+        if (m_pColliderCircle)
+        {
+            Ellipse(hdc, m_pColliderCircle->center.x - m_pColliderCircle->radius,
+                m_pColliderCircle->center.y - m_pColliderCircle->radius,
+                m_pColliderCircle->center.x + m_pColliderCircle->radius,
+                m_pColliderCircle->center.y + m_pColliderCircle->radius);
+        }
+
+        if (m_pColliderBox)
+        {
+            Rectangle(hdc, m_pColliderBox->center.x - m_pColliderBox->halfSize.x,
+                m_pColliderBox->center.y - m_pColliderBox->halfSize.y,
+                m_pColliderBox->center.x + m_pColliderBox->halfSize.x,
+                m_pColliderBox->center.y + m_pColliderBox->halfSize.y);
+        }
+
+        // ÀÌÀü °´Ã¼ º¹¿ø ¹× Ææ »èÁ¦
+        SelectObject(hdc, hOldPen);
+        SelectObject(hdc, hOldBrush);
+        DeleteObject(hPen);
+    }
+>>>>>>> 8f18362 (no message)
 
     void Move(float deltaTime);
 
