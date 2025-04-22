@@ -7,9 +7,9 @@
 //#check 헤더 부터 보자
 int main()
 {
-	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	//_CrtSetBreakAlloc(162);
+	//_CrtSetBreakAlloc(165);
 
 	MyFirstWndGame game;
 	if (false == game.Initialize())

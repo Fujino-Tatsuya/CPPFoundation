@@ -1,4 +1,5 @@
 #include "MyFirstWndGame.h"
+#include "MyFirstWndGame.h"
 #include "GameTimer.h"
 #include "Collider.h"
 #include "GameObject.h"
@@ -253,7 +254,6 @@ void MyFirstWndGame::UpdatePlayerInfo()
 		}
 	}
 }
-
 void MyFirstWndGame::Update()
 {
 	m_pGameTimer->Tick();

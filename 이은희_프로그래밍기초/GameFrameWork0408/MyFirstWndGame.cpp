@@ -60,15 +60,15 @@ bool MyFirstWndGame::Initialize()
 
 #pragma endregion
 
-    m_GameObjectPtrTable = new GameObjectBase * [MAX_GAME_OBJECT_COUNT];
-
-    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
+    //플레이씬 m_GameObjectPtrTable = new GameObjectBase * [MAX_GAME_OBJECT_COUNT];
+    
+    /*for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
     {
         m_GameObjectPtrTable[i] = nullptr;
-    }
+    }*/
 
     // [CHECK]. 첫 번째 게임 오브젝트는 플레이어 캐릭터로 고정!
-    CreatePlayer();
+    //CreatePlayer();
 
    
 
@@ -114,7 +114,8 @@ void MyFirstWndGame::Finalize()
     delete m_pGameTimer;
     m_pGameTimer = nullptr;
 
-    if (m_GameObjectPtrTable)
+    //플레이씬
+    /*if (m_GameObjectPtrTable)
     {
         for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
         {
@@ -126,7 +127,7 @@ void MyFirstWndGame::Finalize()
         }
         
        delete [] m_GameObjectPtrTable;
-    }
+    }*/
 
     __super::Destroy();
 }
@@ -142,20 +143,20 @@ void MyFirstWndGame::FixedUpdate()
 void MyFirstWndGame::LogicUpdate()
 {
 
-    UpdatePlayerInfo();
-
-    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
+    //UpdatePlayerInfo();
+    //플레이씬
+   /* for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
     {
         if (m_GameObjectPtrTable[i])
         {
             m_GameObjectPtrTable[i]->Update(m_fDeltaTime);
         }
-    }
+    }*/
 }
 
 void MyFirstWndGame::CreatePlayer()
 {
-    assert(m_GameObjectPtrTable[0] == nullptr && "Player object already exists!");
+    //플레이씬 assert(m_GameObjectPtrTable[0] == nullptr && "Player object already exists!");
 
     GameObject* pNewObject = new GameObject(ObjectType::PLAYER);
 
@@ -169,7 +170,7 @@ void MyFirstWndGame::CreatePlayer()
     pNewObject->SetColliderCircle(50.0f); // 일단, 임의로 설정. 오브젝트 설정할 거 다 하고 나서 하자.
     //pNewObject->SetColliderBox(25, 25); 박스 콜라이더 설정
 
-    m_GameObjectPtrTable[0] = pNewObject;
+    //플레이씬 m_GameObjectPtrTable[0] = pNewObject;
 }
 
 void MyFirstWndGame::CreateEnemy()
@@ -192,47 +193,51 @@ void MyFirstWndGame::CreateEnemy()
     pNewObject->SetBitmapInfo(m_pEnemyBitmapInfo);
     pNewObject->SetColliderCircle(50.0f); // 일단, 임의로 설정. 오브젝트 설정할 거 다 하고 나서 하자.
 
-    int i = 0;
-    while (++i < MAX_GAME_OBJECT_COUNT) //0번째는 언제나 플레이어!
-    {
-        if (nullptr == m_GameObjectPtrTable[i])
-        {
-            m_GameObjectPtrTable[i] = pNewObject;
-            break;
-        }
-    }
+    
 
-    if (i == MAX_GAME_OBJECT_COUNT)
-    {
-        // 게임 오브젝트 테이블이 가득 찼습니다.
-        delete pNewObject;
-        pNewObject = nullptr;
-    }
+    //플레이씬
+    //int i = 0;
+    //while (++i < MAX_GAME_OBJECT_COUNT) //0번째는 언제나 플레이어!
+    //{
+    //    if (nullptr == m_GameObjectPtrTable[i])
+    //    {
+    //        m_GameObjectPtrTable[i] = pNewObject;
+    //        break;
+    //    }
+    //}
+
+    //if (i == MAX_GAME_OBJECT_COUNT)
+    //{
+    //    // 게임 오브젝트 테이블이 가득 찼습니다.
+    //    delete pNewObject;
+    //    pNewObject = nullptr;
+    //}
 }
 
-void MyFirstWndGame::UpdatePlayerInfo()
-{
-    // 이동하지 않아요. 목표 위치를 보고 방향을 설정해요.
-    static GameObject* pPlayer = GetPlayer();
-
-    assert(pPlayer != nullptr);
-
-    Vector2f mousePos(m_PlayerTargetPos.x, m_PlayerTargetPos.y);
-    Vector2f playerPos = pPlayer->GetPosition();
-
-    Vector2f playerDir = mousePos - playerPos;
-    float distance = playerDir.Length(); // 거리 계산
-
-    if (distance > 50.f) //임의로 설정한 거리
-    {
-        playerDir.Normalize(); // 정규화
-        pPlayer->SetDirection(playerDir); // 플레이어 방향 설정
-    }
-    else
-    {
-        pPlayer->SetDirection(Vector2f(0, 0)); // 플레이어 정지
-    }
-}
+//플레이씬
+//void MyFirstWndGame::UpdatePlayerInfo()
+//{
+//    // 이동하지 않아요. 목표 위치를 보고 방향을 설정해요.
+//    static GameObject* pPlayer = GetPlayer();
+//
+//    assert(pPlayer != nullptr);
+//
+//    Vector2f mousePos(m_PlayerTargetPos.x, m_PlayerTargetPos.y);
+//    Vector2f playerPos = pPlayer->GetPosition();
+//
+//    Vector2f playerDir = mousePos - playerPos;
+//    float distance = playerDir.Length(); // 거리 계산
+//
+//    if (distance > 50.f) //임의로 설정한 거리
+//    {
+//        playerDir.Normalize(); // 정규화
+//        pPlayer->SetDirection(playerDir); // 플레이어 방향 설정
+//    }
+//    else
+//    {
+//        pPlayer->SetDirection(Vector2f(0, 0)); // 플레이어 정지
+//    }
+//}
 
 void MyFirstWndGame::Update()
 {
@@ -256,13 +261,14 @@ void MyFirstWndGame::Render()
     ::PatBlt(m_hBackDC, 0, 0, m_width, m_height, WHITENESS);
 
     //메모리 DC에 그리기
-    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
+    /*for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
     {
         if (m_GameObjectPtrTable[i])
         {
             m_GameObjectPtrTable[i]->Render(m_hBackDC);
         }
-    }
+    }*/
+    //플레이씬
 
     //메모리 DC에 그려진 결과를 실제 DC(m_hFrontDC)로 복사
     BitBlt(m_hFrontDC, 0, 0, m_width, m_height, m_hBackDC, 0, 0, SRCCOPY);

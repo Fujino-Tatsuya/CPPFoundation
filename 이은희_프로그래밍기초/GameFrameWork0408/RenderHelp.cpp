@@ -142,16 +142,30 @@ namespace renderHelp
             if (m_pConverter) m_pConverter->Release();
         }
 
+        BitmapInfo* currentBitmap = nullptr;
+
         BitmapInfo* CreateBitmapInfo(HBITMAP hBitmap)
         {
             BitmapInfo* pNewBitmap = new BitmapInfo(hBitmap);
+
+            pNewBitmap->m_pPrevLink = currentBitmap;
+            currentBitmap = pNewBitmap;
       
             return pNewBitmap;
         }
 
+        BitmapInfo* tempBitMap = nullptr;
+
         void DeleteAllBitmaps()
         {
-        
+            while (currentBitmap != nullptr)
+            {
+                tempBitMap = currentBitmap->m_pPrevLink;
+
+                delete currentBitmap;
+
+                currentBitmap = tempBitMap;
+            }
         }
 
         HRESULT m_LastError = S_OK;

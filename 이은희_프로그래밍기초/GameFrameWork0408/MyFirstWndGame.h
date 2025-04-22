@@ -39,9 +39,9 @@ private:
     void CreatePlayer();
     void CreateEnemy();
 
-    void UpdatePlayerInfo();
+    //void UpdatePlayerInfo();
 
-    GameObject* GetPlayer() const { return (GameObject*)m_GameObjectPtrTable[0]; }
+    //GameObject* GetPlayer() const { return (GameObject*)m_GameObjectPtrTable[0]; } 플레이씬
 
 private:
     HDC m_hFrontDC = nullptr;
@@ -55,7 +55,7 @@ private:
     float m_fFrameCount = 0.0f;
 
     // [CHECK] #8. 게임 오브젝트를 관리하는 컨테이너.
-    GameObjectBase** m_GameObjectPtrTable = nullptr;
+    //GameObjectBase** m_GameObjectPtrTable = nullptr; 플레이씬
 
     struct MOUSE_POS
     {
@@ -81,5 +81,17 @@ private:
 
     BitmapInfo* m_pEnemyBitmapInfo = nullptr;
 
+
+public:
+    using Vector2f = learning::Vector2f;
+    Vector2f PlayerTargetPosition() const { return Vector2f(m_PlayerTargetPos.x, m_PlayerTargetPos.y); }
+    Vector2f EnemySpawnPosition() const { return Vector2f(m_EnemySpawnPos.x, m_EnemySpawnPos.y); }
+    void ResetEnemySpawnPosition() { m_EnemySpawnPos = { 0, 0 }; } //Queue 로 관리하면 더 예쁨
+
+
+    BitmapInfo* GetPlayerBitmapInfo() const { return m_pPlayerBitmapInfo; }
+    BitmapInfo* GetEnemyBitmapInfo() const { return m_pEnemyBitmapInfo; }
+
+    //BitmapInfo* GetBackgroundBitmapInfo() const { return m_pBackgroundBitmapInfo; }
 #pragma endregion
 };
