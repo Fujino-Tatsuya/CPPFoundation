@@ -214,6 +214,11 @@ void MyFirstWndGame::CreateEnemy()
     //}
 }
 
+Vector2f MyFirstWndGame::PlayerTargetPosition() const
+{
+    return Vector2f(m_PlayerTargetPos.x, m_PlayerTargetPos.y);
+}
+
 //ÇÃ·¹ÀÌ¾À
 //void MyFirstWndGame::UpdatePlayerInfo()
 //{

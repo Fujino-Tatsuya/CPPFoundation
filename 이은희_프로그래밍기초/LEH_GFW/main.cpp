@@ -5,17 +5,10 @@
 
 int main()
 {
-	MyFirstWndGame game;
-	if (false == game.Initialize())
-	{
-		std::cout << "Failed to initialize the game. Error: " << GetLastError() << std::endl;
-		return -1;
-	}
+	int* a = new int; //(1)
 
-	game.Run();
+	a = new int; //(2)
 
-	game.Finalize();
-
-	return 0;
+	delete a;
 
 }

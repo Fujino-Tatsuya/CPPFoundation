@@ -3,7 +3,6 @@
 
 LRESULT CALLBACK NzWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
-
 	//[CHECK] #3-Ask NzWndBase의 protected 멤버변수에 접근 가능한 이유는?
 	switch (msg)
 	{
