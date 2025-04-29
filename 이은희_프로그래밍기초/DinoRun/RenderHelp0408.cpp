@@ -23,25 +23,17 @@ namespace renderHelp
         {
             DeleteAllBitmaps();
 
-            /*  try
-              {
-                  if (m_pFactory)
-                  {
-                      m_pFactory->Release();
-                      m_pFactory = nullptr;
-                  }
-              }
-              catch (const std::exception& e)
-              {
-                  std::cout << e.what() << std::endl;
-              }*/
-
-
+            if (m_pFactory)
+            {
+                m_pFactory->Release();
+                m_pFactory = nullptr;
+            }
+            
             CoUninitialize();
         }
 
         bool Initialize()
-        {
+        {         
             m_LastError = CoCreateInstance(
                 CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_pFactory));
 
@@ -129,7 +121,7 @@ namespace renderHelp
 
             return true;
         }
-
+     
         HRESULT GetLastError() const
         {
             return m_LastError;
@@ -142,27 +134,22 @@ namespace renderHelp
             if (m_pConverter) m_pConverter->Release();
         }
 
-        BitmapInfo* pLinkStart = nullptr;
-
         BitmapInfo* CreateBitmapInfo(HBITMAP hBitmap)
         {
             BitmapInfo* pNewBitmap = new BitmapInfo(hBitmap);
-            pNewBitmap->m_pPrevLink = pLinkStart;
-            pLinkStart = pNewBitmap;
+
+            //노드로 연결시켜서 관리해보기
 
             return pNewBitmap;
         }
 
         void DeleteAllBitmaps()
         {
-            BitmapInfo* pCurBitmap;
-            while (pLinkStart != nullptr)
-            {
-                pCurBitmap = pLinkStart;
-                pLinkStart = pLinkStart->m_pPrevLink;
-                delete pCurBitmap;
-            }
+            // 순회를 시작하는 노드 포인터를 갖고 전부 지우기
         }
+
+        BitmapInfo* m_LinkStart = nullptr;
+        BitmapInfo* m_LinkEnd = nullptr;
 
         HRESULT m_LastError = S_OK;
 
@@ -175,7 +162,7 @@ namespace renderHelp
         WICInitializer(const WICInitializer&) = delete;
         WICInitializer& operator=(const WICInitializer&) = delete;
     }GWICInitializer;
-
+  
 
     BitmapInfo* CreateBitmapInfo(LPCWSTR filename)
     {
@@ -272,7 +259,7 @@ namespace renderHelp
         // 메모리 DC 해제
         DeleteDC(hdcMem);
         DeleteDC(hdcNewMem);
-
+        
         // 새로운 비트맵 정보 생성
         BitmapInfo* pNewBitmapInfo = GWICInitializer.CreateBitmapInfo(hNewBitmap);
         return pNewBitmapInfo;

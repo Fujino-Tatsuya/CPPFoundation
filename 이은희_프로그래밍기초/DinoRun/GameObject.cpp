@@ -116,34 +116,12 @@ void GameObject::SetBitmapInfo(BitmapInfo* bitmapInfo)
     m_pBitmapInfo = bitmapInfo;
 
 
-    // 스프라이트 정보는 일단은 하드코딩해요. 
-    // 일단, 프레임 크기와 시간이 같다고 가정합니다.
-    m_frameWidth = m_pBitmapInfo->GetWidth() / 5;
-    m_frameHeight = m_pBitmapInfo->GetHeight() / 3;
+    /*m_frameWidth = m_pBitmapInfo->GetWidth() / 5;
+    m_frameHeight = m_pBitmapInfo->GetHeight() / 3;*/
     m_frameIndex = 0;
-
-    for (int i = 0; i < 5; ++i)
-    {
-        m_frameXY[i].x = i * m_frameWidth;
-        m_frameXY[i].y = 0;
-    }
-
-    for (int i = 0; i < 5; ++i)
-    {
-        m_frameXY[i + 5].x = i * m_frameWidth;
-        m_frameXY[i + 5].y = m_frameHeight;
-    }
-
-    for (int i = 0; i < 4; ++i)
-    {
-        m_frameXY[i + 10].x = i * m_frameWidth;
-        m_frameXY[i + 10].y = m_frameHeight * 2;
-    }
 
 }
 
-// 과제: 해당 코드의 문제는 무엇일까요? 어떻게 개선하면 좋을까요?
-// 개선 방향에 대해 서로 토론하고 비교해 보세요.
 void GameObject::DrawBitmap(HDC hdc)
 {
     if (m_pBitmapInfo == nullptr) return;
@@ -159,7 +137,7 @@ void GameObject::DrawBitmap(HDC hdc)
     blend.AlphaFormat = AC_SRC_ALPHA;
 
     const int x = m_pos.x - m_width / 2;
-    const int y = m_pos.y - m_height / 2;
+    const int y = m_pos.y - m_height / 2; // 중앙 맞춰주고
 
     const int srcX = m_frameXY[m_frameIndex].x;
     const int srcY = m_frameXY[m_frameIndex].y;
