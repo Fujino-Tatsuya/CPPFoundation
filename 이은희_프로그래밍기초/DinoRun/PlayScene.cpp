@@ -98,12 +98,12 @@ void PlayScene::CreatePlayer()
     GameObject* pNewObject = new GameObject(ObjectType::PLAYER);
 
     pNewObject->SetName("Player");
-    pNewObject->SetPosition(10.0f, 10.0f); // 일단, 임의로 설정 
-    pNewObject->SetSpeed(0.5f); // 일단, 임의로 설정  
-    pNewObject->SetWidth(100); // 일단, 임의로 설정
-    pNewObject->SetHeight(100); // 일단, 임의로 설정
+    pNewObject->SetPosition(10, 500 ); // 일단, 임의로 설정 
+    pNewObject->SetSpeed(0); // 일단, 임의로 설정  
+    pNewObject->SetWidth(88); // 일단, 임의로 설정
+    pNewObject->SetHeight(94); // 일단, 임의로 설정
 
-    pNewObject->SetBitmapInfo(m_pGame->GetMainBitmapInfo());
+    pNewObject->SetBitmapInfo(m_pGame->GetMainBitmapInfo()); //게임이 로드한 이미지 setting
     pNewObject->SetColliderCircle(50.0f); // 일단, 임의로 설정. 오브젝트 설정할 거 다 하고 나서 하자.
 
     m_GameObjectPtrTable[0] = pNewObject;

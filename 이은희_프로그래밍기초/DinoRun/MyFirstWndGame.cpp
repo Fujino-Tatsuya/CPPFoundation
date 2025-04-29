@@ -41,6 +41,8 @@ bool MyFirstWndGame::Initialize()
 #pragma region resource
     m_mainBitmapInfo = renderHelp::CreateBitmapInfo(L"../Resource/sprite.png");
 
+
+
     if (m_mainBitmapInfo == nullptr)
     {
         std::cout << "Bitmap Load Failed!" << std::endl;

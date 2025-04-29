@@ -115,11 +115,10 @@ void GameObject::SetBitmapInfo(BitmapInfo* bitmapInfo)
 
     m_pBitmapInfo = bitmapInfo;
 
+    m_frameXY[0] = { 1513,1,88,94 };
+    m_frameXY[1] = { 1602,1,88,94 };
 
-    /*m_frameWidth = m_pBitmapInfo->GetWidth() / 5;
-    m_frameHeight = m_pBitmapInfo->GetHeight() / 3;*/
     m_frameIndex = 0;
-
 }
 
 void GameObject::DrawBitmap(HDC hdc)
@@ -137,13 +136,13 @@ void GameObject::DrawBitmap(HDC hdc)
     blend.AlphaFormat = AC_SRC_ALPHA;
 
     const int x = m_pos.x - m_width / 2;
-    const int y = m_pos.y - m_height / 2; // 중앙 맞춰주고
+    const int y = m_pos.y - m_height / 2;
 
     const int srcX = m_frameXY[m_frameIndex].x;
     const int srcY = m_frameXY[m_frameIndex].y;
 
     AlphaBlend(hdc, x, y, m_width, m_height,
-        hBitmapDC, srcX, srcY, m_frameWidth, m_frameHeight, blend);
+        hBitmapDC, srcX, srcY, m_frameXY[m_frameIndex].width, m_frameXY[m_frameIndex].height, blend);
 
     // 비트맵 핸들 복원
     SelectObject(hBitmapDC, hOldBitmap);
@@ -164,6 +163,7 @@ void GameObject::UpdateFrame(float deltaTime)
         m_frameTime = 0.0f;
         m_frameIndex = (m_frameIndex + 1) % (m_frameCount);
     }
+    //와 0을 나눠버리면 오류 나니까 상수 +1 과 나머지 조합으로 0이 나오지 않도록, 하지만 인덱스는 순회하도록
 }
 
 void GameObjectBase::SetName(const char* name)
