@@ -19,7 +19,7 @@ bool MyFirstWndGame::Initialize()
     m_pGameTimer->Reset();
 
     const wchar_t* className = L"MyFirstWndGame";
-    const wchar_t* windowName = L"Scene Start";
+    const wchar_t* windowName = L"DINO RUN";
 
     if (false == __super::Create(className, windowName, 1024, 720))
     {
@@ -39,14 +39,9 @@ bool MyFirstWndGame::Initialize()
     m_hDefaultBitmap = (HBITMAP)SelectObject(m_hBackDC, m_hBackBitmap);
 
 #pragma region resource
-    m_pPlayerBitmapInfo = renderHelp::CreateBitmapInfo(L"../Resource/redbird.png");
-    m_pEnemyBitmapInfo = renderHelp::CreateBitmapInfo(L"../Resource/graybird.png");
+    m_mainBitmapInfo = renderHelp::CreateBitmapInfo(L"../Resource/sprite.png");
 
-    // 관리할 리소스가 늘어나면 좀 더 효율적인 방안을 고려해야 해요.
-    m_pBackgroundBitmapInfo = renderHelp::CreateBitmapInfo(L"../Resource/background.png");
-
-    if (m_pPlayerBitmapInfo == nullptr || m_pEnemyBitmapInfo == nullptr
-        || m_pBackgroundBitmapInfo == nullptr)
+    if (m_mainBitmapInfo == nullptr)
     {
         std::cout << "Bitmap Load Failed!" << std::endl;
         return false;

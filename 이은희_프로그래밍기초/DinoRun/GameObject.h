@@ -21,6 +21,10 @@ enum class ObjectType
     BULLET,
     ITEM,
     BACKGROUND,
+    CACTUS,
+    BIRD,
+    GROUND,
+
 };
 
 constexpr int OBJECT_NAME_LEN_MAX = 15;
@@ -112,21 +116,19 @@ protected:
     ColliderCircle* m_pColliderCircle = nullptr;
     ColliderBox* m_pColliderBox = nullptr;
 
-    // Bitmap 정보
     BitmapInfo* m_pBitmapInfo = nullptr;
 
-    // 점진적으로 예쁘게 고쳐 보아요.
-    struct FrameFPos
+    struct SpriteFrame
     {
         int x;
         int y;
+        int width;
+        int height;
     };
-    // 프레임 정보: 왜 14개냐고 물으시면 셌다고 밖에...:)
-    FrameFPos m_frameXY[14] = { { 0, 0 }, };
-    int m_frameWidth = 0;
-    int m_frameHeight = 0;
+
+    SpriteFrame m_frameXY[100] = { { 0, 0 }, };
     int m_frameIndex = 0;
-    int m_frameCount = 14; // 프레임 수
+    int m_frameCount = 100; // 프레임 수
 
     float m_frameTime = 0.0f;
     float m_frameDuration = 100.0f; // 임의 설정

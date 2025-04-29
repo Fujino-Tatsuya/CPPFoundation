@@ -21,11 +21,21 @@ namespace renderHelp
 
         ~WICInitializer()
         {
-            if (m_pFactory)
-            {
-                m_pFactory->Release();
-                m_pFactory = nullptr;
-            }
+            DeleteAllBitmaps();
+
+            /*  try
+              {
+                  if (m_pFactory)
+                  {
+                      m_pFactory->Release();
+                      m_pFactory = nullptr;
+                  }
+              }
+              catch (const std::exception& e)
+              {
+                  std::cout << e.what() << std::endl;
+              }*/
+
 
             CoUninitialize();
         }
@@ -136,9 +146,16 @@ namespace renderHelp
         {
             BitmapInfo* pNewBitmap = new BitmapInfo(hBitmap);
 
+            // 생성된 비트맵 노드를 관리해야 한다.
+            // 노드를 링크 시켜서 관리해 봅시다.
+
             return pNewBitmap;
         }
 
+        void DeleteAllBitmaps()
+        {
+            // 순회를 시작할 수 있는 BitmapInfo의 포인터가 있어야 해요.
+        }
 
         HRESULT m_LastError = S_OK;
 
@@ -155,6 +172,102 @@ namespace renderHelp
 
     BitmapInfo* CreateBitmapInfo(LPCWSTR filename)
     {
-        return nullptr;
+        static bool bCoInit = GWICInitializer.Initialize();
+        if (false == bCoInit)
+        {
+            return nullptr;
+        }
+
+        HBITMAP hBitmap = nullptr;
+        BitmapInfo* pBitmapInfo = nullptr;
+        if (GWICInitializer.LoadImageFromFile(filename, hBitmap))
+        {
+            pBitmapInfo = GWICInitializer.CreateBitmapInfo(hBitmap);
+        }
+
+        GWICInitializer.Clean();
+
+        return pBitmapInfo;
+    }
+
+    HDC Create32BitMemoryDC(HDC hdcScreen, int width, int height, HBITMAP& hBitmapOut)
+    {
+        // BITMAPINFO 구조체 초기화
+        BITMAPINFO bmi = { 0 };
+        bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+        bmi.bmiHeader.biWidth = width;
+        bmi.bmiHeader.biHeight = -height;    // top-down DIB (음수 사용)
+        bmi.bmiHeader.biPlanes = 1;
+        bmi.bmiHeader.biBitCount = 32;         // 32비트 (알파 포함)
+        bmi.bmiHeader.biCompression = BI_RGB;     // 압축 없음
+
+        // DIBSection 생성 (DIB_RGB_COLORS: 색상 테이블 사용하지 않음)
+        void* pBits = nullptr;
+        hBitmapOut = CreateDIBSection(hdcScreen, &bmi, DIB_RGB_COLORS, &pBits, NULL, 0);
+        if (!hBitmapOut)
+        {
+            return nullptr;
+        }
+
+        // 스크린 DC에 호환되는 메모리 DC 생성 후, 생성한 32비트 비트맵을 선택
+        HDC hdcMem = CreateCompatibleDC(hdcScreen);
+        if (!hdcMem)
+        {
+            DeleteObject(hBitmapOut);
+            hBitmapOut = nullptr;
+            return nullptr;
+        }
+
+        SelectObject(hdcMem, hBitmapOut);
+        return hdcMem;
+    }
+
+    // 좌우 반전 이미지
+    BitmapInfo* CreateFlippedBitmap(BitmapInfo* pBitmapInfo)
+    {
+        if (nullptr == pBitmapInfo)
+        {
+            return nullptr;
+        }
+        HBITMAP hBitmap = pBitmapInfo->GetBitmapHandle();
+
+        if (nullptr == hBitmap)
+        {
+            return nullptr;
+        }
+
+        HDC hdcScreen = GetDC(nullptr);
+        HDC hdcMem = CreateCompatibleDC(hdcScreen);
+        if (!hdcMem)
+        {
+            ReleaseDC(nullptr, hdcScreen);
+            return nullptr;
+        }
+        HBITMAP hNewBitmap = nullptr;
+        HDC hdcNewMem = Create32BitMemoryDC(hdcScreen, pBitmapInfo->GetWidth(), pBitmapInfo->GetHeight(), hNewBitmap);
+        if (!hdcNewMem)
+        {
+            DeleteDC(hdcMem);
+            ReleaseDC(nullptr, hdcScreen);
+            return nullptr;
+        }
+        // 비트맵을 메모리 DC에 그리기
+        BitBlt(hdcNewMem, 0, 0, pBitmapInfo->GetWidth(), pBitmapInfo->GetHeight(), hdcMem, 0, 0, SRCCOPY);
+        // 비트맵을 반전시키기
+        for (int y = 0; y < pBitmapInfo->GetHeight(); ++y)
+        {
+            for (int x = 0; x < pBitmapInfo->GetWidth(); ++x)
+            {
+                COLORREF color = GetPixel(hdcNewMem, x, y);
+                SetPixel(hdcNewMem, x, y, RGB(255 - GetRValue(color), 255 - GetGValue(color), 255 - GetBValue(color)));
+            }
+        }
+        // 메모리 DC 해제
+        DeleteDC(hdcMem);
+        DeleteDC(hdcNewMem);
+
+        // 새로운 비트맵 정보 생성
+        BitmapInfo* pNewBitmapInfo = GWICInitializer.CreateBitmapInfo(hNewBitmap);
+        return pNewBitmapInfo;
     }
 }

@@ -20,7 +20,7 @@ void TitleScene::Initialize(NzWndBase* pWnd)
     pNewObject->SetWidth(width);
     pNewObject->SetHeight(height);
 
-    pNewObject->SetBitmapInfo(m_pGame->GetBackgroundBitmapInfo());
+    pNewObject->SetBitmapInfo(m_pGame->GetMainBitmapInfo());
 
     m_rect.left = width / 2 - 50;
     m_rect.top = height / 2 - 50;
@@ -35,7 +35,7 @@ void TitleScene::Update(float deltaTime)
     static float time = 0.0f;
     time += deltaTime;
 
-    if (time > 10000.0f)
+    if (time > 3000.0f)
     {
         time = 0.0f;
         m_pGame->ChangeScene(SceneType::SCENE_PLAY);

@@ -87,11 +87,7 @@ private:
 #pragma region resource
     using BitmapInfo = renderHelp::BitmapInfo;
 
-    BitmapInfo* m_pPlayerBitmapInfo = nullptr;
-
-    BitmapInfo* m_pEnemyBitmapInfo = nullptr;
-
-    BitmapInfo* m_pBackgroundBitmapInfo = nullptr;
+    BitmapInfo* m_mainBitmapInfo = nullptr;
 
 public:
 
@@ -101,10 +97,7 @@ public:
     void ResetEnemySpawnPosition() { m_EnemySpawnPos = { 0, 0 }; } //Queue 로 관리하면 더 예쁨
 
 
-    BitmapInfo* GetPlayerBitmapInfo() const { return m_pPlayerBitmapInfo; }
-    BitmapInfo* GetEnemyBitmapInfo() const { return m_pEnemyBitmapInfo; }
-
-    BitmapInfo* GetBackgroundBitmapInfo() const { return m_pBackgroundBitmapInfo; }
+    BitmapInfo* GetMainBitmapInfo() const { return m_mainBitmapInfo; }
 
 #pragma endregion
 };
