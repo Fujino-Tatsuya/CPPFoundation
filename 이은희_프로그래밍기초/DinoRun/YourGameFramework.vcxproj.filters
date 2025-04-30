@@ -16,6 +16,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{9629e39c-12c8-46d4-8c87-921d8f03aaf3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SceneH">
+      <UniqueIdentifier>{be1a56f6-d4f8-46e6-a72d-c91897bd37be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Collider.cpp">
@@ -77,20 +80,20 @@
     <ClInclude Include="RenderHelp.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="EndingScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Sprite.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>SceneH</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>SceneH</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>SceneH</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingScene.h">
+      <Filter>SceneH</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,6 +2,8 @@
 
 #include "Utillity.h"
 #include <algorithm>
+
+#include <iostream>
 // [CHECK]. namespace 포함해서 전방 선언해야 함
 namespace learning
 {
@@ -24,7 +26,7 @@ enum class ObjectType
 	CACTUS,
 	BIRD,
 	GROUND,
-
+	BUTTON,
 };
 
 constexpr int OBJECT_NAME_LEN_MAX = 15;
@@ -68,8 +70,7 @@ protected:
 
 	void Move(float deltaTime)
 	{
-		m_pos.x += m_dir.x * m_speed * deltaTime;
-		m_pos.y += m_dir.y * m_speed * deltaTime;
+		m_pos.x -= m_speed * deltaTime;
 	}
 
 protected:
@@ -104,6 +105,7 @@ public:
 	void SetColliderBox(float halfWidth, float halfHeight);
 
 	void SetBitmapInfo(BitmapInfo* bitmapInfo);
+	void SetState(int state);
 
 protected:
 	void DrawCollider(HDC hdc);
@@ -126,30 +128,14 @@ protected:
 		int height;
 	};
 
-	SpriteFrame m_frameXY[100] = { { 0, 0 ,0 ,0 }, };
+	SpriteFrame m_frameXY[15] = { { 0, 0 ,0 ,0 }, };
 	int m_frameIndex = 0;
 	int m_frameCount = 2; // 프레임 수
+	
+	int m_addFrameIndex = 0;
+
+	bool isGround = true;
 
 	float m_frameTime = 0.0f;
 	float m_frameDuration = 100.0f; // 임의 설정
-};
-
-class Background : public GameObject
-{
-	using BitmapInfo = renderHelp::BitmapInfo;
-
-public:
-	Background(const Background&) = delete;
-	Background(ObjectType type) : GameObject(type) {}
-	~Background() override;
-
-	void Update(float deltaTime) override;
-	void Render(HDC hdc) override;
-
-	void SetBitmapInfo(BitmapInfo* bitmapInfo);
-
-protected:
-	void DrawBitmap(HDC hdc);
-	// Bitmap 정보
-	BitmapInfo* m_pBitmapInfo = nullptr;
 };

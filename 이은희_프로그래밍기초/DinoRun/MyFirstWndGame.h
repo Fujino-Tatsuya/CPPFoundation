@@ -8,6 +8,23 @@ class GameTimer;
 //class GameObjectBase;
 //class GameObject;
 
+enum TYPE
+{
+    RESTART,
+    IDLE,
+    CLOUDE,
+    BIRD1,
+    BIRD2,
+    CACTUS,
+    BIGCACTUS,
+    JUMP,
+    RUN1,
+    RUN2,
+    DEAD,
+    DUCKING1,
+    DUCKING2,
+    GROUND,
+};
 
 class Scene;
 namespace renderHelp
@@ -40,15 +57,6 @@ private:
 
     void FixedUpdate();
     void LogicUpdate();
-
-    //[20250422] PlayeScene 로 이동
-    //void CreatePlayer();
-    //void CreateEnemy();
-
-    //void UpdatePlayerInfo();
-
-    //GameObject* GetPlayer() const { return (GameObject*)m_GameObjectPtrTable[0]; }
-
 private:
     HDC m_hFrontDC = nullptr;
     HDC m_hBackDC = nullptr;
@@ -94,13 +102,14 @@ private:
 public:
 
     using Vector2f = learning::Vector2f;
-    Vector2f PlayerTargetPosition() const { return Vector2f(m_PlayerTargetPos.x, m_PlayerTargetPos.y); }
-    Vector2f EnemySpawnPosition() const { return Vector2f(m_EnemySpawnPos.x, m_EnemySpawnPos.y); }
-    void ResetEnemySpawnPosition() { m_EnemySpawnPos = { 0, 0 }; } //Queue 로 관리하면 더 예쁨
+    //Vector2f PlayerTargetPosition() const { return Vector2f(m_PlayerTargetPos.x, m_PlayerTargetPos.y); }
+    // EnemySpawnPosition() const { return Vector2f(m_EnemySpawnPos.x, m_EnemySpawnPos.y); }
+    //void ResetEnemySpawnPosition() { m_EnemySpawnPos = { 0, 0 }; } //Queue 로 관리하면 더 예쁨
     Vector2f OnClickPosition() const { return Vector2f(m_OnClickPos.x, m_OnClickPos.y); }
 
-
     BitmapInfo* GetMainBitmapInfo() const { return m_mainBitmapInfo; }
+
+    TYPE playerState;
 
 #pragma endregion
 };

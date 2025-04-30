@@ -13,7 +13,7 @@ void TitleScene::Initialize(NzWndBase* pWnd)
     m_pGame = dynamic_cast<MyFirstWndGame*>(pWnd);
     assert(m_pGame != nullptr && "Game object is not initialized!");
 
-    Background* pNewObject = new Background(ObjectType::BACKGROUND);
+    GameObject* pNewObject = new GameObject(ObjectType::BUTTON);
     pNewObject->SetPosition(0.0f, 0.0f);
 
     int width = m_pGame->GetWidth();

@@ -151,6 +151,79 @@ void GameObject::SetBitmapInfo(BitmapInfo* bitmapInfo)
 	m_frameIndex = 0;
 }
 
+void GameObject::SetState(int state)
+{
+	switch (state)
+	{
+	case RESTART:
+		SetWidth(72);
+		SetHeight(64);
+		m_addFrameIndex = 0;
+		m_frameCount = 1;
+		break;
+	case IDLE:
+		SetWidth(88);
+		SetHeight(90);
+		m_addFrameIndex = 1;
+		m_frameCount = 1;
+		break;
+	case CLOUDE:
+		SetWidth(92);
+		SetHeight(27);
+		m_addFrameIndex = 2;
+		m_frameCount = 1;
+		break;
+	case BIRD1:
+		SetWidth(92);
+		SetHeight(68);
+		m_addFrameIndex = 3;
+		m_frameCount = 2;
+		break;
+	case CACTUS:
+		SetWidth(68);
+		SetHeight(70);
+		m_addFrameIndex = 5;
+		m_frameCount = 1;
+		break;
+	case BIGCACTUS:
+		SetWidth(150);
+		SetHeight(100);
+		m_addFrameIndex = 6;
+		m_frameCount = 1;
+		break;
+	case JUMP:
+		SetWidth(88);
+		SetHeight(94);
+		m_addFrameIndex = 7;
+		m_frameCount = 1;
+		break;
+	case RUN1:
+		SetWidth(88);
+		SetHeight(94);
+		m_addFrameIndex = 8;
+		m_frameCount = 2;
+		break;
+	case DEAD:
+		SetWidth(88);
+		SetHeight(94);
+		m_addFrameIndex = 10;
+		m_frameCount = 1;
+		break;
+	case DUCKING1:
+		SetWidth(118);
+		SetHeight(60);
+		m_addFrameIndex = 11;
+		m_frameCount = 2;
+		break;
+	case GROUND:
+		SetWidth(2402);
+		SetHeight(27);
+		m_addFrameIndex = 13;
+		m_frameCount = 1;
+		break;
+	}
+}
+
 void GameObject::DrawBitmap(HDC hdc)
 {
 	if (m_pBitmapInfo == nullptr) return;
@@ -168,11 +241,11 @@ void GameObject::DrawBitmap(HDC hdc)
 	const int x = m_pos.x - m_width / 2;
 	const int y = m_pos.y - m_height / 2;
 
-	const int srcX = m_frameXY[m_frameIndex].x;
-	const int srcY = m_frameXY[m_frameIndex].y;
+	const int srcX = m_frameXY[m_frameIndex + m_addFrameIndex].x;
+	const int srcY = m_frameXY[m_frameIndex + m_addFrameIndex].y;
 
 	AlphaBlend(hdc, x, y, m_width, m_height,
-		hBitmapDC, srcX, srcY, m_frameXY[m_frameIndex].width, m_frameXY[m_frameIndex].height, blend);
+		hBitmapDC, srcX, srcY, m_frameXY[m_frameIndex + m_addFrameIndex].width, m_frameXY[m_frameIndex + m_addFrameIndex].height, blend);
 
 	// 비트맵 핸들 복원
 	SelectObject(hBitmapDC, hOldBitmap);
@@ -204,48 +277,3 @@ void GameObjectBase::SetName(const char* name)
 	m_name[OBJECT_NAME_LEN_MAX - 1] = '\0';
 }
 
-Background::~Background()
-{
-}
-
-void Background::Update(float deltaTime)
-{
-	// 배경은 업데이트가 필요없음
-	// 혹시 배경이 움직일 경우에는 이곳에 구현하면 됨
-}
-
-void Background::Render(HDC hdc)
-{
-	DrawBitmap(hdc);
-}
-
-void Background::SetBitmapInfo(BitmapInfo* bitmapInfo)
-{
-	assert(m_pBitmapInfo == nullptr && "BitmapInfo must be null!");
-
-	m_pBitmapInfo = bitmapInfo;
-}
-
-void Background::DrawBitmap(HDC hdc)
-{
-	if (m_pBitmapInfo == nullptr) return;
-	if (m_pBitmapInfo->GetBitmapHandle() == nullptr) return;
-	HDC hBitmapDC = CreateCompatibleDC(hdc);
-
-	HBITMAP hOldBitmap = (HBITMAP)SelectObject(hBitmapDC, m_pBitmapInfo->GetBitmapHandle());
-	// BLENDFUNCTION 설정 (알파 채널 처리)
-	BLENDFUNCTION blend = { 0 };
-	blend.BlendOp = AC_SRC_OVER;
-	blend.SourceConstantAlpha = 255;  // 원본 알파 채널 그대로 사용
-	blend.AlphaFormat = AC_SRC_ALPHA;
-
-	int screenWidth = 0;
-	int screenHeight = 0;
-	learning::GetScreenSize(screenWidth, screenHeight);
-
-	AlphaBlend(hdc, 0, 0, screenWidth, screenHeight,
-		hBitmapDC, 0, 0, m_width, m_height, blend);
-	// 비트맵 핸들 복원
-	SelectObject(hBitmapDC, hOldBitmap);
-	DeleteDC(hBitmapDC);
-}

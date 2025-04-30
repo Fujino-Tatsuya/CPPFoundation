@@ -21,7 +21,7 @@ bool MyFirstWndGame::Initialize()
     const wchar_t* className = L"MyFirstWndGame";
     const wchar_t* windowName = L"DINO RUN";
 
-    if (false == __super::Create(className, windowName, 1024, 720))
+    if (false == __super::Create(className, windowName, 2400, 400))
     {
         return false;
     }
@@ -41,15 +41,11 @@ bool MyFirstWndGame::Initialize()
 #pragma region resource
     m_mainBitmapInfo = renderHelp::CreateBitmapInfo(L"../Resource/sprite.png");
 
-
-
     if (m_mainBitmapInfo == nullptr)
     {
         std::cout << "Bitmap Load Failed!" << std::endl;
         return false;
     }
-
-
 #pragma endregion
 
     m_pScenes[SceneType::SCENE_TITLE] = new TitleScene();
@@ -61,19 +57,6 @@ bool MyFirstWndGame::Initialize()
 
     m_pScenes[SceneType::SCENE_ENDING] = new EndingScene();
     m_pScenes[SceneType::SCENE_ENDING]->Initialize(this);
-
-
-    //-> PlayScene로 이동.
-    /*m_GameObjectPtrTable = new GameObjectBase*[MAX_GAME_OBJECT_COUNT];
-
-    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
-    {
-        m_GameObjectPtrTable[i] = nullptr;
-    }*/
-
-    // [CHECK]. 첫 번째 게임 오브젝트는 플레이어 캐릭터로 고정!
-    // [20250422] CreatePlayer(); 
-
     return true;
 
 }
@@ -126,20 +109,6 @@ void MyFirstWndGame::Finalize()
         }
     }
 
-    /*  if (m_GameObjectPtrTable)
-      {
-          for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
-          {
-              if (m_GameObjectPtrTable[i])
-              {
-                  delete m_GameObjectPtrTable[i];
-                  m_GameObjectPtrTable[i] = nullptr;
-              }
-          }
-
-         delete [] m_GameObjectPtrTable;
-      }*/
-
     __super::Destroy();
 
 }
@@ -157,26 +126,11 @@ void MyFirstWndGame::ChangeScene(SceneType eSceneType)
 void MyFirstWndGame::FixedUpdate()
 {
     m_pScenes[m_eCurrentScene]->FixedUpdate();
-    /*   if (m_EnemySpawnPos.x != 0 && m_EnemySpawnPos.y != 0)
-       {
-          CreateEnemy();
-       } */
 }
 
 void MyFirstWndGame::LogicUpdate()
 {
-    // 20250421
     m_pScenes[m_eCurrentScene]->Update(m_fDeltaTime);
-
-    /*  UpdatePlayerInfo();
-
-      for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
-      {
-          if (m_GameObjectPtrTable[i])
-          {
-              m_GameObjectPtrTable[i]->Update(m_fDeltaTime);
-          }
-      }*/
 }
 
 
@@ -198,23 +152,11 @@ void MyFirstWndGame::Update()
 
 void MyFirstWndGame::Render()
 {
-    //Clear the back buffer
     ::PatBlt(m_hBackDC, 0, 0, m_width, m_height, WHITENESS);
-
-    //메모리 DC에 그리기
-  /*  for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
-    {
-        if (m_GameObjectPtrTable[i])
-        {
-            m_GameObjectPtrTable[i]->Render(m_hBackDC);
-        }
-    }*/
 
     m_pScenes[m_eCurrentScene]->Render(m_hBackDC);
 
-    //메모리 DC에 그려진 결과를 실제 DC(m_hFrontDC)로 복사
     BitBlt(m_hFrontDC, 0, 0, m_width, m_height, m_hBackDC, 0, 0, SRCCOPY);
-
 }
 
 void MyFirstWndGame::OnResize(int width, int height)
@@ -259,16 +201,29 @@ void MyFirstWndGame::OnLButtonDown(int x, int y)
 
 void MyFirstWndGame::OnKeyDown(UINT key)
 {
-    switch (key)
+    Scene* currentScene = m_pScenes[m_eCurrentScene];
+
+    if (m_eCurrentScene == SceneType::SCENE_PLAY)
     {
-    case VK_UP:
-        std::cout << "위\n";
-        break;
-    case VK_DOWN:
-        std::cout << "아래\n";
-        break;
-    case VK_SPACE:
-        std::cout << "스페이스\n";
-        break;
+        PlayScene* playScene = dynamic_cast<PlayScene*>(currentScene);
+        if (playScene)
+        {
+            GameObject* player = playScene->GetPlayer();
+            if (player)
+            {
+                switch (key)
+                {
+                case VK_UP:
+                    player->SetState(JUMP);
+                    break;
+                case VK_DOWN:
+                    player->SetState(DUCKING1);
+                    break;
+                case VK_SPACE:
+                    player->SetState(JUMP);
+                    break;
+                }
+            }
+        }
     }
 }

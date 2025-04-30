@@ -20,15 +20,19 @@ class PlayScene :public Scene
     void FixedUpdate() override;
     void Update(float deltaTime) override;
     void Render(HDC hDC) override;
+
+
+    GameObject* GetPlayer() const { return (GameObject*)m_GameObjectPtrTable[0]; }
+    GameObject* GetGround(int index) const { return (GameObject*)m_GameObjectPtrTable[index]; }
   
 private:
     void CreatePlayer();
     void CreateEnemy();
+    void CreateGround(int count, int pos);
 
     void UpdatePlayerInfo();
-    void UpdateEnemyInfo();
+    void UpdateGroundInfo();
 
-    GameObject* GetPlayer() const { return (GameObject*)m_GameObjectPtrTable[0]; }
 
     MyFirstWndGame* m_pGame = nullptr;
 };

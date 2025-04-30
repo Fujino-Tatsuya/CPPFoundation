@@ -8,6 +8,7 @@ using namespace learning;
 
 constexpr int MAX_GAME_OBJECT_COUNT = 1000;
 
+
 void PlayScene::Initialize(NzWndBase* pWnd)
 {
     m_pGame = dynamic_cast<MyFirstWndGame*>(pWnd);
@@ -26,19 +27,12 @@ void PlayScene::FixedUpdate()
 {
     assert(m_pGame != nullptr && "Game object is not initialized!");
 
-    Vector2f enemyPos = m_pGame->EnemySpawnPosition();
-    if (enemyPos.x != 0 && enemyPos.y != 0)
-    {
-        CreateEnemy();
-        m_pGame->ResetEnemySpawnPosition();
-    }
 }
 
 void PlayScene::Update(float deltaTime)
 {
     UpdatePlayerInfo();
-
-    UpdateEnemyInfo();
+    UpdateGroundInfo();
 
     for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
     {
@@ -81,13 +75,14 @@ void PlayScene::Finalize()
 
 void PlayScene::Enter()
 {
-    // [CHECK]. 첫 번째 게임 오브젝트는 플레이어 캐릭터로 고정!
     CreatePlayer();
-
+    CreateGround(1, 1201);
+    CreateGround(2, 3603);
 }
 
 void PlayScene::Leave()
 {
+
 }
 
 void PlayScene::CreatePlayer()
@@ -98,13 +93,14 @@ void PlayScene::CreatePlayer()
     GameObject* pNewObject = new GameObject(ObjectType::PLAYER);
 
     pNewObject->SetName("Player");
-    pNewObject->SetPosition(10, 500 ); // 일단, 임의로 설정 
-    pNewObject->SetSpeed(0); // 일단, 임의로 설정  
+    pNewObject->SetPosition(55, 333 ); // 일단, 임의로 설정 
+    pNewObject->SetSpeed(0); // 일단, 임의로 설정 
     pNewObject->SetWidth(88); // 일단, 임의로 설정
     pNewObject->SetHeight(94); // 일단, 임의로 설정
 
     pNewObject->SetBitmapInfo(m_pGame->GetMainBitmapInfo()); //게임이 로드한 이미지 setting
-    pNewObject->SetColliderCircle(50.0f); // 일단, 임의로 설정. 오브젝트 설정할 거 다 하고 나서 하자.
+    pNewObject->SetState(IDLE);
+    pNewObject->SetColliderCircle(5);
 
     m_GameObjectPtrTable[0] = pNewObject;
 }
@@ -117,10 +113,6 @@ void PlayScene::CreateEnemy()
 
     pNewObject->SetName("Enemy");
 
-    Vector2f enemyPos = m_pGame->EnemySpawnPosition();
-
-    pNewObject->SetPosition(enemyPos.x, enemyPos.y);
-
     pNewObject->SetSpeed(0.1f); // 일단, 임의로 설정  
     pNewObject->SetWidth(100); // 일단, 임의로 설정
     pNewObject->SetHeight(100); // 일단, 임의로 설정
@@ -130,8 +122,8 @@ void PlayScene::CreateEnemy()
 
     pNewObject->SetColliderCircle(50.0f); // 일단, 임의로 설정. 오브젝트 설정할 거 다 하고 나서 하자.
 
-    int i = 0;
-    while (++i < MAX_GAME_OBJECT_COUNT) //0번째는 언제나 플레이어!
+    int i = 1;
+    while (++i < MAX_GAME_OBJECT_COUNT) //0번째 player, 1번쨰 ground
     {
         if (nullptr == m_GameObjectPtrTable[i])
         {
@@ -148,6 +140,26 @@ void PlayScene::CreateEnemy()
     }
 }
 
+void PlayScene::CreateGround(int count, int pos)
+{
+    assert(m_pGame != nullptr && "Game object is not initialized!");
+
+    GameObject* pNewObject = new GameObject(ObjectType::GROUND);
+
+    pNewObject->SetName("Ground1");
+
+    pNewObject->SetPosition(pos, 366);
+
+    pNewObject->SetSpeed(1);
+    pNewObject->SetWidth(2402);
+    pNewObject->SetHeight(27);
+    pNewObject->SetState(GROUND);
+
+    pNewObject->SetBitmapInfo(m_pGame->GetMainBitmapInfo());
+
+    m_GameObjectPtrTable[count] = pNewObject;
+}
+
 void PlayScene::UpdatePlayerInfo()
 {
     static GameObject* pPlayer = GetPlayer();
@@ -155,50 +167,27 @@ void PlayScene::UpdatePlayerInfo()
     assert(pPlayer != nullptr);
     assert(m_pGame != nullptr && "MyFirstWndGame is null!");
 
-    Vector2f targetPos = m_pGame->PlayerTargetPosition();
     Vector2f playerPos = pPlayer->GetPosition();
 
-    Vector2f playerDir = targetPos - playerPos;
-    float distance = playerDir.Length(); // 거리 계산
-
-    if (distance > 50.f) //임의로 설정한 거리
-    {
-        playerDir.Normalize(); // 정규화
-        pPlayer->SetDirection(playerDir); // 플레이어 방향 설정
-    }
-    else
-    {
-        pPlayer->SetDirection(Vector2f(0, 0)); // 플레이어 정지
-    }
 }
 
-void PlayScene::UpdateEnemyInfo()
+void PlayScene::UpdateGroundInfo()
 {
-    static GameObject* pPlayer = GetPlayer();
-    assert(pPlayer != nullptr);
+    GameObject* pGround1 = GetGround(1);
+    GameObject* pGround2 = GetGround(2);
 
-    Vector2f playerPos = GetPlayer()->GetPosition();
-    for (int i = 1; i < MAX_GAME_OBJECT_COUNT; ++i) //0번째는 언제나 플레이어!
+    Vector2f gPos1 = pGround1->GetPosition();
+    Vector2f gPos2 = pGround2->GetPosition();
+    if (gPos1.x < -1201)
     {
-        if (m_GameObjectPtrTable[i] != nullptr)
-        {
-            GameObject* pEnemy = static_cast<GameObject*>(m_GameObjectPtrTable[i]);
-            
-            Vector2f enemyPos = pEnemy->GetPosition();
-            
-            Vector2f enemyDir = playerPos - enemyPos;
-            float distance = enemyDir.Length(); // 거리 계산
-
-            if (distance > 50.f) //임의로 설정한 거리
-            {
-                enemyDir.Normalize(); // 정규화
-                pEnemy->SetDirection(enemyDir); // 방향 설정
-            }
-            else
-            {
-                pEnemy->SetDirection(Vector2f(0, 0)); //  정지
-            }
-        }
+        pGround1->SetPosition(3603, 366);
     }
+    if (gPos2.x < -1201)
+    {
+        pGround2->SetPosition(3603, 366);
+    }
+
+
+    
 }
 
