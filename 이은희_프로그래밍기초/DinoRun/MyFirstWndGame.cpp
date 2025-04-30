@@ -89,13 +89,13 @@ void MyFirstWndGame::Run()
             {
                 MyFirstWndGame::OnLButtonDown(LOWORD(msg.lParam), HIWORD(msg.lParam));
             }
-            else if (msg.message == WM_RBUTTONDOWN)
-            {
-                MyFirstWndGame::OnRButtonDown(LOWORD(msg.lParam), HIWORD(msg.lParam));
-            }
             else if (msg.message == WM_MOUSEMOVE)
             {
                 MyFirstWndGame::OnMouseMove(LOWORD(msg.lParam), HIWORD(msg.lParam));
+            }
+            else if (msg.message == WM_KEYDOWN)
+            {
+                MyFirstWndGame::OnKeyDown(static_cast<UINT>(msg.wParam));
             }
             else
             {
@@ -246,27 +246,29 @@ void MyFirstWndGame::OnClose()
 
 void MyFirstWndGame::OnMouseMove(int x, int y)
 {
-    /*   std::cout << __FUNCTION__ << std::endl;
-       std::cout << "x: " << x << ", y: " << y << std::endl;*/
     m_MousePosPrev = m_MousePos;
     m_MousePos = { x, y };
 }
 
 void MyFirstWndGame::OnLButtonDown(int x, int y)
 {
-    /*  std::cout << __FUNCTION__ << std::endl;
- std::cout << "x: " << x << ", y: " << y << std::endl;*/
+    m_OnClickPos = m_MousePos;
 
-    m_PlayerTargetPos.x = x;
-    m_PlayerTargetPos.y = y;
-
+    std::cout << m_OnClickPos.x << std::endl << m_OnClickPos.y << std::endl;
 }
 
-void MyFirstWndGame::OnRButtonDown(int x, int y)
+void MyFirstWndGame::OnKeyDown(UINT key)
 {
-    /*  std::cout << __FUNCTION__ << std::endl;
-   std::cout << "x: " << x << ", y: " << y << std::endl;*/
-
-    m_EnemySpawnPos.x = x;
-    m_EnemySpawnPos.y = y;
+    switch (key)
+    {
+    case VK_UP:
+        std::cout << "위\n";
+        break;
+    case VK_DOWN:
+        std::cout << "아래\n";
+        break;
+    case VK_SPACE:
+        std::cout << "스페이스\n";
+        break;
+    }
 }

@@ -36,7 +36,7 @@ private:
 
     void OnMouseMove(int x, int y);
     void OnLButtonDown(int x, int y);
-    void OnRButtonDown(int x, int y);
+    void OnKeyDown(UINT key);
 
     void FixedUpdate();
     void LogicUpdate();
@@ -84,6 +84,8 @@ private:
     MOUSE_POS m_PlayerTargetPos = { 0, 0 };
     MOUSE_POS m_EnemySpawnPos = { 0, 0 };
 
+    MOUSE_POS m_OnClickPos = { 0,0 };
+
 #pragma region resource
     using BitmapInfo = renderHelp::BitmapInfo;
 
@@ -95,6 +97,7 @@ public:
     Vector2f PlayerTargetPosition() const { return Vector2f(m_PlayerTargetPos.x, m_PlayerTargetPos.y); }
     Vector2f EnemySpawnPosition() const { return Vector2f(m_EnemySpawnPos.x, m_EnemySpawnPos.y); }
     void ResetEnemySpawnPosition() { m_EnemySpawnPos = { 0, 0 }; } //Queue 로 관리하면 더 예쁨
+    Vector2f OnClickPosition() const { return Vector2f(m_OnClickPos.x, m_OnClickPos.y); }
 
 
     BitmapInfo* GetMainBitmapInfo() const { return m_mainBitmapInfo; }

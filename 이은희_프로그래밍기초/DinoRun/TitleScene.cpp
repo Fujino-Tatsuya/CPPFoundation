@@ -4,6 +4,8 @@
 #include "Utillity.h"
 #include <assert.h>
 
+#include <iostream> // debug¿ë
+
 using namespace learning;
 
 void TitleScene::Initialize(NzWndBase* pWnd)
@@ -22,27 +24,22 @@ void TitleScene::Initialize(NzWndBase* pWnd)
 
     pNewObject->SetBitmapInfo(m_pGame->GetMainBitmapInfo());
 
-    m_rect.left = width / 2 - 50;
-    m_rect.top = height / 2 - 50;
-    m_rect.right = m_rect.left + 100;
-    m_rect.bottom = m_rect.top + 100;
+    m_rect.left = width / 2 - 36;
+    m_rect.top = height / 2 - 32;
+    m_rect.right = m_rect.left + 72;
+    m_rect.bottom = m_rect.top + 64;
 
     m_pBackground = pNewObject;
 }
 
 void TitleScene::Update(float deltaTime)
 {
-    static float time = 0.0f;
-    time += deltaTime;
+    Vector2f onclickpos = m_pGame->OnClickPosition();
 
-    if (time > 3000.0f)
+    if (onclickpos.x > m_rect.left && onclickpos.x < m_rect.right && onclickpos.y < m_rect.bottom && onclickpos.y > m_rect.top)
     {
-        time = 0.0f;
+        std::cout << "SceneChange" << std::endl;
         m_pGame->ChangeScene(SceneType::SCENE_PLAY);
-    }
-    else
-    {
-        wsprintf(m_szTitle, L"Title Scene %d", static_cast<int>(time / 1000.0f) + 1);
     }
 }
 
