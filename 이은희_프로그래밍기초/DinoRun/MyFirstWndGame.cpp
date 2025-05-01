@@ -80,6 +80,10 @@ void MyFirstWndGame::Run()
             {
                 MyFirstWndGame::OnKeyDown(static_cast<UINT>(msg.wParam));
             }
+            else if (msg.message == WM_KEYUP)
+            {
+                MyFirstWndGame::OnKeyUP(static_cast<UINT>(msg.wParam));
+            }
             else
             {
                 TranslateMessage(&msg);
@@ -218,6 +222,7 @@ void MyFirstWndGame::OnKeyDown(UINT key)
                 {
                 case VK_UP:
                     player->SetState(JUMP);
+                    player->SetPosition(55, 300);
                     break;
                 case VK_DOWN:
                     player->SetState(DUCKING1);
@@ -230,3 +235,33 @@ void MyFirstWndGame::OnKeyDown(UINT key)
         }
     }
 }
+
+void MyFirstWndGame::OnKeyUP(UINT key)
+{
+    Scene* currentScene = m_pScenes[m_eCurrentScene];
+
+    if (m_eCurrentScene == SceneType::SCENE_PLAY)
+    {
+        PlayScene* playScene = dynamic_cast<PlayScene*>(currentScene);
+
+        playScene->SetGamePlay();
+
+        if (playScene)
+        {
+            GameObject* player = playScene->GetPlayer();
+            if (player)
+            {
+                switch (key)
+                {
+                case VK_UP:
+                    player->SetPosition(55, 333);
+                    break;
+                case VK_DOWN:
+                    player->SetState(RUN1);
+                    break;
+                }
+            }
+        }
+    }
+}
+

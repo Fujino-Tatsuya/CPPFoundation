@@ -19,5 +19,6 @@ namespace learning
 	bool Intersect(ColliderCircle const& lhs, ColliderCircle const& rhs);
 	// AABB
 	bool Intersect(ColliderBox const& lhs, ColliderBox const& rhs);
+
 }
 

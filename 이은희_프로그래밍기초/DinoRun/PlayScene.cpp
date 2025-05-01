@@ -116,7 +116,9 @@ void PlayScene::CreatePlayer()
 
     pNewObject->SetBitmapInfo(m_pGame->GetMainBitmapInfo()); //게임이 로드한 이미지 setting
     pNewObject->SetState(IDLE);
-    pNewObject->SetColliderCircle(5);
+    pNewObject->SetColliderBox(60, 90);
+
+    pNewObject->SetOnGround(true);
 
     m_GameObjectPtrTable[0] = pNewObject;
 }
@@ -130,13 +132,13 @@ void PlayScene::CreateEnemy()
     pNewObject->SetName("Enemy");
 
     pNewObject->SetSpeed(0.1f); // 일단, 임의로 설정  
-    pNewObject->SetWidth(100); // 일단, 임의로 설정
-    pNewObject->SetHeight(100); // 일단, 임의로 설정
+    pNewObject->SetWidth(92); // 일단, 임의로 설정
+    pNewObject->SetHeight(80); // 일단, 임의로 설정
 
     
     pNewObject->SetBitmapInfo(m_pGame->GetMainBitmapInfo()); //여기
 
-    pNewObject->SetColliderCircle(50.0f); // 일단, 임의로 설정. 오브젝트 설정할 거 다 하고 나서 하자.
+    //pNewObject->SetColliderCircle(50.0f);
 
     int i = 1;
     while (++i < MAX_GAME_OBJECT_COUNT) //0번째 player, 1번쨰 ground
@@ -185,6 +187,18 @@ void PlayScene::UpdatePlayerInfo()
 
     Vector2f playerPos = pPlayer->GetPosition();
 
+    std::cout << pPlayer->GetOnGround() << std::endl;
+
+    if (playerPos.y >= 333)
+    {
+        playerPos.y = 333;
+        pPlayer->SetOnGround(true);
+    }
+    else if(playerPos.y < 333)
+    {
+        pPlayer->SetOnGround(false);
+    }
+
 }
 
 void PlayScene::UpdateGroundInfo()
@@ -202,8 +216,5 @@ void PlayScene::UpdateGroundInfo()
     {
         pGround2->SetPosition(3603, 366);
     }
-
-
-    
 }
 

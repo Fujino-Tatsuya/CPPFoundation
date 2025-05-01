@@ -107,6 +107,9 @@ public:
 	void SetBitmapInfo(BitmapInfo* bitmapInfo);
 	void SetState(int state);
 
+	void SetOnGround(bool current);
+	bool GetOnGround();
+
 protected:
 	void DrawCollider(HDC hdc);
 	void DrawBitmap(HDC hdc);

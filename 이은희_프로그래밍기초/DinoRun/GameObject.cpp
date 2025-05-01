@@ -142,7 +142,7 @@ void GameObject::SetBitmapInfo(BitmapInfo* bitmapInfo)
 	m_frameXY[BIGCACTUS] = { 801,1,150,100 };
 	m_frameXY[JUMP] = { 1337,1,88,94 };
 	m_frameXY[RUN1] = { 1513,1,88,94 };
-	m_frameXY[RUN2] = { 1602,1,88,94 };
+	m_frameXY[RUN2] = { 1601,1,88,94 };
 	m_frameXY[DEAD] = { 1690,1,88,94 };
 	m_frameXY[DUCKING1] = { 1865,4,118,91 };
 	m_frameXY[DUCKING2] = { 1983,4,118,91 };
@@ -200,6 +200,7 @@ void GameObject::SetState(int state)
 	case RUN1:
 		SetWidth(88);
 		SetHeight(94);
+		SetColliderBox(60, 94);
 		m_addFrameIndex = 8;
 		m_frameCount = 2;
 		break;
@@ -212,6 +213,7 @@ void GameObject::SetState(int state)
 	case DUCKING1:
 		SetWidth(118);
 		SetHeight(91);
+		SetColliderBox(118, 20);
 		m_addFrameIndex = 11;
 		m_frameCount = 2;
 		break;
@@ -222,6 +224,16 @@ void GameObject::SetState(int state)
 		m_frameCount = 1;
 		break;
 	}
+}
+
+void GameObject::SetOnGround(bool current)
+{
+	isGround = current;
+}
+
+bool GameObject::GetOnGround()
+{
+	return isGround;
 }
 
 void GameObject::DrawBitmap(HDC hdc)

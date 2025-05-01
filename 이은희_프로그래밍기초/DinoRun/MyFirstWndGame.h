@@ -54,6 +54,7 @@ private:
     void OnMouseMove(int x, int y);
     void OnLButtonDown(int x, int y);
     void OnKeyDown(UINT key);
+    void OnKeyUP(UINT key);
 
     void FixedUpdate();
     void LogicUpdate();
