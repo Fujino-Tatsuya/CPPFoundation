@@ -52,7 +52,6 @@ bool MyFirstWndGame::Initialize()
         return false;
     }
 
-
 #pragma endregion
 
     m_pScenes[SceneType::SCENE_TITLE] = new TitleScene();
@@ -65,20 +64,7 @@ bool MyFirstWndGame::Initialize()
     m_pScenes[SceneType::SCENE_ENDING] = new EndingScene();
     m_pScenes[SceneType::SCENE_ENDING]->Initialize(this);
 
-
-    //-> PlayScene로 이동.
-    /*m_GameObjectPtrTable = new GameObjectBase*[MAX_GAME_OBJECT_COUNT];
-
-    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
-    {
-        m_GameObjectPtrTable[i] = nullptr;
-    }*/
-
-    // [CHECK]. 첫 번째 게임 오브젝트는 플레이어 캐릭터로 고정!
-    // [20250422] CreatePlayer(); 
-
     return true;
-
 }
 
 void MyFirstWndGame::Run()

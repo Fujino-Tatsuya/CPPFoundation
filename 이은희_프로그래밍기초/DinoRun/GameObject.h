@@ -110,6 +110,9 @@ public:
 	void SetOnGround(bool current);
 	bool GetOnGround();
 
+	void UpdateJump();
+	void SetJump();
+
 protected:
 	void DrawCollider(HDC hdc);
 	void DrawBitmap(HDC hdc);
@@ -140,5 +143,10 @@ protected:
 	bool isGround = true;
 
 	float m_frameTime = 0.0f;
-	float m_frameDuration = 100.0f; // 임의 설정
+	float m_frameDuration = 100.0f;
+
+	float velocityY = 0.0f;
+	const float gravity = 0.007f;
+	const float jumpPower = -2.0f;
+
 };

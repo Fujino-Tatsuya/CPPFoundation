@@ -26,8 +26,8 @@ void PlayScene::Initialize(NzWndBase* pWnd)
 void PlayScene::FixedUpdate()
 {
     assert(m_pGame != nullptr && "Game object is not initialized!");
-
 }
+    
 
 void PlayScene::Update(float deltaTime)
 {
@@ -189,7 +189,9 @@ void PlayScene::UpdatePlayerInfo()
 
     std::cout << pPlayer->GetOnGround() << std::endl;
 
-    if (playerPos.y >= 333)
+    pPlayer->UpdateJump();
+
+    /*if (playerPos.y >= 333)
     {
         playerPos.y = 333;
         pPlayer->SetOnGround(true);
@@ -197,8 +199,7 @@ void PlayScene::UpdatePlayerInfo()
     else if(playerPos.y < 333)
     {
         pPlayer->SetOnGround(false);
-    }
-
+    }*/
 }
 
 void PlayScene::UpdateGroundInfo()

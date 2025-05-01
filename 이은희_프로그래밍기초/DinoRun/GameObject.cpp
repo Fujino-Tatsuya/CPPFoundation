@@ -236,6 +236,32 @@ bool GameObject::GetOnGround()
 	return isGround;
 }
 
+void GameObject::UpdateJump()
+{
+	if (!isGround)
+	{
+		velocityY += gravity;
+		m_pos.y += velocityY;
+
+		if (m_pos.y >= 333)
+		{
+			m_pos.y = 333;
+			velocityY = 0.0f;
+			isGround = true;
+		}
+	}
+}
+
+void GameObject::SetJump()
+{
+	if (isGround)
+	{
+		velocityY = jumpPower;
+		isGround = false;
+	}
+
+}
+
 void GameObject::DrawBitmap(HDC hdc)
 {
 	if (m_pBitmapInfo == nullptr) return;
