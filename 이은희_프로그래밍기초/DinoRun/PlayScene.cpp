@@ -31,6 +31,7 @@ void PlayScene::FixedUpdate()
 
 void PlayScene::Update(float deltaTime)
 {
+    if (GetisStart() == false) return;
     UpdatePlayerInfo();
     UpdateGroundInfo();
 
@@ -54,6 +55,21 @@ void PlayScene::Render(HDC hDC)
             m_GameObjectPtrTable[i]->Render(hDC);
         }
     }
+}
+
+void PlayScene::SetGameStop()
+{
+    isGameStart = false;
+}
+
+void PlayScene::SetGamePlay()
+{
+    isGameStart = true;
+}
+
+bool PlayScene::GetisStart()
+{
+    return isGameStart;
 }
 
 void PlayScene::Finalize()

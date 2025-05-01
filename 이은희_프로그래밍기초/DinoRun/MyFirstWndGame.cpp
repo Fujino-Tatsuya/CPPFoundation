@@ -206,6 +206,9 @@ void MyFirstWndGame::OnKeyDown(UINT key)
     if (m_eCurrentScene == SceneType::SCENE_PLAY)
     {
         PlayScene* playScene = dynamic_cast<PlayScene*>(currentScene);
+
+        playScene->SetGamePlay();
+
         if (playScene)
         {
             GameObject* player = playScene->GetPlayer();

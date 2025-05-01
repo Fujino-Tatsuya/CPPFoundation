@@ -14,13 +14,15 @@ void TitleScene::Initialize(NzWndBase* pWnd)
     assert(m_pGame != nullptr && "Game object is not initialized!");
 
     GameObject* pNewObject = new GameObject(ObjectType::BUTTON);
-    pNewObject->SetPosition(0.0f, 0.0f);
+    
 
     int width = m_pGame->GetWidth();
     int height = m_pGame->GetHeight();
 
-    pNewObject->SetWidth(width);
-    pNewObject->SetHeight(height);
+    pNewObject->SetPosition(width / 2, height / 2);
+
+    pNewObject->SetWidth(72);
+    pNewObject->SetHeight(64);
 
     pNewObject->SetBitmapInfo(m_pGame->GetMainBitmapInfo());
 
@@ -49,7 +51,7 @@ void TitleScene::Render(HDC hDC)
 
     m_pBackground->Render(hDC);
 
-    DrawText(hDC, m_szTitle, -1, &m_rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+    //DrawText(hDC, m_szTitle, -1, &m_rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
 }
 
 void TitleScene::Finalize()

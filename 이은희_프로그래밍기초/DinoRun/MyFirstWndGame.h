@@ -109,7 +109,6 @@ public:
 
     BitmapInfo* GetMainBitmapInfo() const { return m_mainBitmapInfo; }
 
-    TYPE playerState;
 
 #pragma endregion
 };

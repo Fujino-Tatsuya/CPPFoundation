@@ -136,16 +136,16 @@ void GameObject::SetBitmapInfo(BitmapInfo* bitmapInfo)
 	m_frameXY[RESTART] = { 1,1,72,64 };
 	m_frameXY[IDLE] = { 75,5,88,90 };
 	m_frameXY[CLOUDE] = { 166,1,92,27 };
-	m_frameXY[BIRD1] = { 259,13,92,68 };
-	m_frameXY[BIRD2] = { 352,2,92,60 };
+	m_frameXY[BIRD1] = { 259,2,92,80 };
+	m_frameXY[BIRD2] = { 352,2,92,80 };
 	m_frameXY[CACTUS] = { 446,2,68,70 };
 	m_frameXY[BIGCACTUS] = { 801,1,150,100 };
 	m_frameXY[JUMP] = { 1337,1,88,94 };
 	m_frameXY[RUN1] = { 1513,1,88,94 };
 	m_frameXY[RUN2] = { 1602,1,88,94 };
 	m_frameXY[DEAD] = { 1690,1,88,94 };
-	m_frameXY[DUCKING1] = { 1865,35,118,60 };
-	m_frameXY[DUCKING2] = { 1983,35,118,60 };
+	m_frameXY[DUCKING1] = { 1865,4,118,91 };
+	m_frameXY[DUCKING2] = { 1983,4,118,91 };
 	m_frameXY[GROUND] = { 0,102,2402,27 };
 
 	m_frameIndex = 0;
@@ -175,7 +175,7 @@ void GameObject::SetState(int state)
 		break;
 	case BIRD1:
 		SetWidth(92);
-		SetHeight(68);
+		SetHeight(80);
 		m_addFrameIndex = 3;
 		m_frameCount = 2;
 		break;
@@ -211,7 +211,7 @@ void GameObject::SetState(int state)
 		break;
 	case DUCKING1:
 		SetWidth(118);
-		SetHeight(60);
+		SetHeight(91);
 		m_addFrameIndex = 11;
 		m_frameCount = 2;
 		break;

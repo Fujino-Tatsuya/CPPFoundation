@@ -21,6 +21,9 @@ class PlayScene :public Scene
     void Update(float deltaTime) override;
     void Render(HDC hDC) override;
 
+    void SetGameStop();
+    void SetGamePlay();
+    bool GetisStart();
 
     GameObject* GetPlayer() const { return (GameObject*)m_GameObjectPtrTable[0]; }
     GameObject* GetGround(int index) const { return (GameObject*)m_GameObjectPtrTable[index]; }
@@ -33,6 +36,7 @@ private:
     void UpdatePlayerInfo();
     void UpdateGroundInfo();
 
+    bool isGameStart = false;
 
     MyFirstWndGame* m_pGame = nullptr;
 };
