@@ -147,10 +147,10 @@ void MyFirstWndGame::Update()
 	m_fDeltaTime = m_pGameTimer->DeltaTimeMS();
 	m_fFrameCount += m_fDeltaTime;
 
-	while (m_fFrameCount >= 200.0f)
+	while (m_fFrameCount >= 10.0f)
 	{
 		FixedUpdate();
-		m_fFrameCount -= 200.0f;
+		m_fFrameCount -= 10.0f;
 	}
 }
 
