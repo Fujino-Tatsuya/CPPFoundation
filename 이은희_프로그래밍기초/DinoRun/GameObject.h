@@ -146,7 +146,7 @@ protected:
 	float m_frameDuration = 100.0f;
 
 	float velocityY = 0.0f;
-	const float gravity = 0.007f;
-	const float jumpPower = -2.0f;
+	const float gravity = 0.9f;
+	const float jumpPower = -20.0f;
 
 };

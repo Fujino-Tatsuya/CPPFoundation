@@ -26,12 +26,18 @@ void PlayScene::Initialize(NzWndBase* pWnd)
 void PlayScene::FixedUpdate()
 {
     assert(m_pGame != nullptr && "Game object is not initialized!");
+
+    GameObject* pPlayer = GetPlayer();
+
+    pPlayer->UpdateJump();
+
 }
     
 
 void PlayScene::Update(float deltaTime)
 {
     if (GetisStart() == false) return;
+
     UpdatePlayerInfo();
     UpdateGroundInfo();
 
@@ -180,7 +186,7 @@ void PlayScene::CreateGround(int count, int pos)
 
 void PlayScene::UpdatePlayerInfo()
 {
-    static GameObject* pPlayer = GetPlayer();
+    GameObject* pPlayer = GetPlayer();
 
     assert(pPlayer != nullptr);
     assert(m_pGame != nullptr && "MyFirstWndGame is null!");
@@ -189,7 +195,7 @@ void PlayScene::UpdatePlayerInfo()
 
     std::cout << pPlayer->GetOnGround() << std::endl;
 
-    pPlayer->UpdateJump();
+    
 
     /*if (playerPos.y >= 333)
     {
